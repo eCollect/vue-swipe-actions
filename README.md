@@ -1,8 +1,6 @@
 # vue-swipe-actions
 
-iOS style swipe actions for Vue.js
-
-## [Live Demo](https://ecollect.github.io/vue-swipe-actions/)
+**iOS style swipe actions for Vue.js, [Live Demo](https://ecollect.github.io/vue-swipe-actions/)**
 
 ## Installation
 
