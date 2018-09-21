@@ -1,26 +1,24 @@
 <template>
 	<div class="swipeout-list card">
-		<transition-group :name="transitionString">
-			<swipe-out
-                v-for="(item, index) in items"
-                :key="item[transitionKey] || index"
-                :ref="`list-item-${index}`"
-                class="swipeout-list-item"
-                @swipeout:click="_emitClick($event, item, index)"
-                @swipeout:dobuleclick="_emitDblClick($event, item)"
-                @swipeout:contentclick="_contentClick($event, item)"
-			>
-				<template slot="left">
-					<slot name="left" :item="item"></slot>
-				</template>
-				<template slot-scope="{ close, revealRight, revealLeft }">
-					<slot :item="item" :index="index" :close="close" :revealRight="revealRight" :revealLeft="revealLeft"></slot>
-				</template>
-				<template slot="right">
-					<slot name="right" :item="item"></slot>
-				</template>
-			</swipe-out>
-		</transition-group>
+		<swipe-out
+			v-for="(item, index) in items"
+			:key="item[transitionKey] || index"
+			:ref="`list-item-${index}`"
+			class="swipeout-list-item"
+			@swipeout:click="_emitClick($event, item, index)"
+			@swipeout:dobuleclick="_emitDblClick($event, item)"
+			@swipeout:contentclick="_contentClick($event, item)"
+		>
+			<template slot="left">
+				<slot name="left" :item="item"></slot>
+			</template>
+			<template slot-scope="{ close, revealRight, revealLeft }">
+				<slot :item="item" :index="index" :close="close" :revealRight="revealRight" :revealLeft="revealLeft"></slot>
+			</template>
+			<template slot="right">
+				<slot name="right" :item="item"></slot>
+			</template>
+		</swipe-out>
 		<template v-if="!items.length">
 			<slot name="empty">No results !</slot>
 		</template>
