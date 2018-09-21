@@ -3,7 +3,7 @@
 		<transition-group :name="transitionString">
 			<swipe-out
                 v-for="(item, index) in items"
-                :key="item[transitionKey]"
+                :key="item[transitionKey] || index"
                 :ref="`list-item-${index}`"
                 class="swipeout-list-item"
                 @swipeout:click="_emitClick($event, item, index)"
