@@ -40,26 +40,20 @@
 				hasRight: 'right' in this.$slots,
 				leftOpen: false,
 				rightOpen: false,
+				leftActionsWidth: 0,
+				rightActionsWidth: 0,
 			};
 		},
 		props: {
 			threshold: {
 				type: Number,
 				default: 45,
-			},
+			},			
 		},
 		mounted() {
 			if (!this.hasLeft && !this.hasRight)
 				return;
 			this._createHammer();
-		},
-		computed: {
-			leftActionsWidth() {
-				return this.$refs.left ? this.$refs.left.clientWidth : 0;
-			},
-			rightActionsWidth() {
-				return this.$refs.right ? this.$refs.right.clientWidth : 0;
-			},
 		},
 		beforeDestroy() {
 			if (this.hammer)
@@ -139,6 +133,9 @@
 			_startListener(event) {
 				this.isTransitioning = false;
 				if (event.deltaY >= -5 && event.deltaY <= 5) {
+					this.leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
+					this.rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
+
 					this.startLeft = this._distanceSwiped();
 					this.isActive = true;
 
