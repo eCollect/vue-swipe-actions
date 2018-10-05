@@ -4,6 +4,7 @@
 			v-for="(item, index) in items"
 			:key="item[transitionKey] || index"
 			:ref="`list-item-${index}`"
+			:disabled="disabled"
 			class="swipeout-list-item"
 			@swipeout:click="_emitClick($event, item, index)"
 			@swipeout:dobuleclick="_emitDblClick($event, item)"
@@ -39,9 +40,9 @@
 				type: String,
 				default: 'id',
 			},
-			transitionString: {
-				type: String,
-				default: 'swipe-list-item',
+			disabled: {
+				type: Boolean,
+				default: false,
 			},
 		},
 		methods: {

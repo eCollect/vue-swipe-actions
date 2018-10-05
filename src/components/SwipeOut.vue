@@ -1,6 +1,6 @@
 <template>
 	<div class="swipeout"
-		:class="{'swipeout--transitioning' : isTransitioning}">
+		:class="{'swipeout--transitioning' : isTransitioning, 'swipeout--disabled': disabled}">
 		<div v-if="hasLeft" class="swipeout-left" ref="left">
 			<slot name="left"></slot>
 		</div>
@@ -48,7 +48,11 @@
 			threshold: {
 				type: Number,
 				default: 45,
-			},			
+			},
+			disabled: {
+				type: Boolean,
+				default: false,
+			}	
 		},
 		mounted() {
 			if (!this.hasLeft && !this.hasRight)
@@ -87,22 +91,13 @@
 				this.rightOpen = true;
 				this._animateSlide(-this.rightActionsWidth, oldLeft);
 			},
-			clickReveal() {
-				if (!this.hasLeft && this.hasRight)
-					if (this.rightOpen)
-						this.closeActions();
-					else
-						this.revealRight();
-				if (this.hasLeft && !this.hasRight)
-					if (this.leftOpen)
-						this.closeActions();
-					else
-						this.revealLeft();
-			},
 			// private
 			_createHammer() {
 				this.hammer = new Hammer.Manager(this.$el, {
 					touchAction: 'pan-y',
+					cssProps: {
+						userSelect: '',
+					},
 				});
 
 				const doubelTab = new Hammer.Tap({ event: 'doubletap', taps: 2 });
@@ -131,6 +126,9 @@
 				return contentRect.left - elementRect.left;
 			},
 			_startListener(event) {
+				if (this.disbaled)
+					return null;
+
 				this.isTransitioning = false;
 				if (event.deltaY >= -5 && event.deltaY <= 5) {
 					this.leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
@@ -148,7 +146,7 @@
 				this.closeActions();
 			},
 			_swipeListener(event) {
-				if (!this.isActive)
+				if (!this.isActive || this.disabled)
 					return null;
 
 				const newX = this.startLeft + event.deltaX;
@@ -180,7 +178,7 @@
 				return this._animateSlide(newX);
 			},
 			_stopListener(event) {
-				if (!this.isActive)
+				if (!this.isActive || this.disabled)
 					return null;
 
 				const oldLeft = this.$refs.content.getBoundingClientRect().left;
@@ -260,12 +258,18 @@
 				});
 			},
 			_singleTap(e) {
+				if (this.disabled)
+					return;
 				this.$emit('swipeout:click', e);
 			},
 			_doubleTap(e) {
+				if (this.disabled)
+					return;
 				this.$emit('swipeout:dobuleclick', e);
 			},
 			contentClick(e) {
+				if (this.disabled)
+					return;
 				this.$emit('swipeout:contentclick', e);
 			},
 		},
@@ -277,6 +281,10 @@
   overflow: hidden;
   user-select: none;
   display: flex;
+}
+
+.swipeout.swipeout--disabled {
+  user-select: auto;
 }
 
 .swipeout .swipeout-left, .swipeout .swipeout-right {
