@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <button @click="lessIsMore">less buttons</button>
-    <swipe-list class="card" :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
+    <swipe-list class="card" :disabled="!enabled" :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
       <template slot-scope="{ item, index, revealLeft, revealRight, close }">
         <!-- item is the corresponding object from the array -->
         <!-- index is clearly the index -->
@@ -34,7 +33,7 @@
           <!-- place icon here or what ever you want -->
           <i class="fa fa-heart"></i>
         </div>
-        <div v-if="!less" class="swipeout-action green">
+        <div class="swipeout-action green">
           <!-- place icon here or what ever you want -->
           <i class="fa fa-heart"></i>
         </div>
@@ -44,6 +43,7 @@
         list is empty ( filtered or just empty )
       </div>
     </swipe-list>
+    <p><small><i>Press and hold [shift] to select text</i></small></p>
   </div>
 </template>
 
@@ -59,7 +59,7 @@
     },
     data() {
       return {
-        less: false,
+        enabled: true,
         mockSwipeList: [
           {
             id: 0,
@@ -79,6 +79,15 @@
         ],
       };
     },
+    mounted() {
+      // ideally should be in some global handler/store
+      window.addEventListener('keydown', this.onKeyDown);
+      window.addEventListener('keyup', this.onKeyUp);
+    },
+    beforeDestroy() {
+      window.removeEventListener('keydown', this.onKeyDown);
+      window.removeEventListener('keyup', this.onKeyUp);
+    },
     methods: {
       contentClick(e) {
         console.log(e, 'content click');
@@ -95,8 +104,16 @@
       sbClick(e) {
         console.log(e, 'Second Button Click');
       },
-      lessIsMore() {
-        this.less = true;
+      // keyboard
+      onKeyDown(e) {
+          if (e.keyCode !== 16)
+            return;
+          this.enabled = false;
+      },
+      onKeyUp(e) {
+          if (e.keyCode !== 16)
+            return;
+          this.enabled = true;
       }
     },
 }
