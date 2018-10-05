@@ -1,6 +1,8 @@
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ? '/vue-swipe-actions/' : '/',
+  baseUrl: isProduction ? '/vue-swipe-actions/' : '/',
   css: {
-    extract: false
+    extract: isProduction
   }
 };
