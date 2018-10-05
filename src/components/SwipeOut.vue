@@ -157,8 +157,8 @@
 				if (this.startLeft === 0 && this.direction === 'ltr' && newX < 0)
 					return this._animateSlide(-reduceSwipe(-newX));
 
-				if (this.startLeft === 0 && this.direction === 'rtl' && newX > 0)
 				// attempting to reveal the left actions after revealing the right actions
+				if (this.startLeft === 0 && this.direction === 'rtl' && newX > 0)
 					return this._animateSlide(reduceSwipe(newX));
 
 				// attempting to reveal the right actions after starting with the left actions revealed
@@ -236,10 +236,10 @@
 
 				const actionsWidth = this.rightActionsWidth;
 
-				const progress = 1 + Math.min(newX / actionsWidth, -1);
+				const progress = 1 + Math.max(newX / actionsWidth, -1);
 				const deltaX = Math.max(newX, -actionsWidth);
 				const children = actions.children;
-
+				
 				for (let i = 0; i < children.length; i++) {
 					const child = children[i];
 					child.style.transform = translateX(deltaX - (child.offsetLeft * progress));
