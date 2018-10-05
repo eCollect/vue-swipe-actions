@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "NODE_ENV=production vue-cli-service build",
-    "build-bundle": "vue-cli-service build --target lib --name vue-swipe-actions ./src/components/index.js",
+    "build-bundle": "vue-cli-service --mode production build --target lib --name vue-swipe-actions ./src/components/index.js",
     "lint": "vue-cli-service lint",
     "deploy": "gh-pages-deploy"
   },
@@ -32,17 +32,19 @@
   },
   "dependencies": {
     "hammerjs": "^2.0.8",
-    "vue": "^2.5.16"
   },
   "main": "./dist/vue-swipe-actions.common.js",
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.3",
-    "@vue/cli-plugin-eslint": "^3.0.3",
-    "@vue/cli-service": "^3.0.3",
+    "@vue/cli-plugin-babel": "^3.0.4",
+    "@vue/cli-plugin-eslint": "^3.0.4",
+    "@vue/cli-service": "^3.0.4",
     "gh-pages-deploy": "^0.5.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.3",
     "vue-template-compiler": "^2.5.16"
+  },
+  "peerDependencies": {
+    "vue": "^2.5.x"
   },
   "babel": {
     "presets": [
@@ -75,6 +77,7 @@
     "not ie <= 8"
   ],
   "files": [
-    "dist/vue-swipe-actions.common.js"
+    "dist/vue-swipe-actions.common.js",
+    "dist/vue-swipe-actions.css"
   ]
 }
