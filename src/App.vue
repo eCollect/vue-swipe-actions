@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <button @click="lessIsMore">less buttons</button>
     <swipe-list class="card" :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
       <template slot-scope="{ item, index, revealLeft, revealRight, close }">
         <!-- item is the corresponding object from the array -->
@@ -14,28 +15,28 @@
           <span>{{ index }}</span>
         </div>
       </template>
+      <!-- left swipe side template and slot-scope="{ item }" is the item clearly -->
+      <!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
       <template slot="left" slot-scope="{ item }">
-        <!-- left swipe side template and slot-scope="{ item }" is the item clearly -->
-        <!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
-        <div class="swipeout-action action-panel-left">
-          <div>
-            <!-- place icon here or what ever you want -->
-            <i class="fa fa-cloud"></i>
-          </div>
-          <div>
-            <!-- place icon here or what ever you want -->
-            <i class="fa fa-file"></i>
-          </div>
+        <div class="swipeout-action red">
+          <!-- place icon here or what ever you want -->
+          <i class="fa fa-cloud"></i>
+        </div>
+        <div  class="swipeout-action purple">
+          <!-- place icon here or what ever you want -->
+          <i class="fa fa-file"></i>
         </div>
       </template>
+      <!-- right swipe side template and slot-scope="{ item }" is the item clearly -->
+      <!-- remove <template slot="right" slot-scope="{ item }"> if you dont wanna have right swipe side  -->
       <template slot="right" slot-scope="{ item }">
-        <!-- right swipe side template and slot-scope="{ item }" is the item clearly -->
-        <!-- remove <template slot="right" slot-scope="{ item }"> if you dont wanna have right swipe side  -->
-        <div class="swipeout-action action-panel-right">
-          <div>
-            <!-- place icon here or what ever you want -->
-            <i class="fa fa-heart"></i>
-          </div>
+        <div class="swipeout-action blue">
+          <!-- place icon here or what ever you want -->
+          <i class="fa fa-heart"></i>
+        </div>
+        <div v-if="!less" class="swipeout-action green">
+          <!-- place icon here or what ever you want -->
+          <i class="fa fa-heart"></i>
         </div>
       </template>
       <div slot="empty">
@@ -58,6 +59,7 @@
     },
     data() {
       return {
+        less: false,
         mockSwipeList: [
           {
             id: 0,
@@ -93,6 +95,9 @@
       sbClick(e) {
         console.log(e, 'Second Button Click');
       },
+      lessIsMore() {
+        this.less = true;
+      }
     },
 }
 </script>
@@ -104,38 +109,40 @@
 	flex-direction: column;
 }
 .swipeout-action {
-  display: flex;
-  > div {
     display: flex;
     align-items: center;
     padding: 0 3rem;
     cursor: pointer;
-  }
-  &.action-panel-right {
-    > div {
-      background-color: dodgerblue;
-      color: white;
-      &:hover {
-        background-color: darken(dodgerblue, 5%);
-      }
+    left: 0;
+    // https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/
+    &.blue {
+      color: white;    
+      background-color: rgb(0,122,255);
+        &:hover {
+          background-color: darken(rgb(0,122,255), 5%);
+        }
     }
-  }
-  &.action-panel-left {
-    > div:nth-of-type(even) {
-      background-color: darkorchid;
-      color: white;
-      &:hover {
-        background-color: darken(darkorchid, 5%);
-      }
+    &.purple {
+      color: white;    
+      background-color: rgb(88,86,214);
+        &:hover {
+        background-color: darken(rgb(88,86,214), 5%);
+        }
     }
-    > div:nth-of-type(odd) {
-      background-color: dodgerblue;
-      color: white;
-      &:hover {
-        background-color: darken(dodgerblue, 5%);
-      }
+    &.red {
+      color: white;    
+      background-color: rgb(255,59,48);
+        &:hover {
+        background-color: darken(rgb(255,59,48), 5%);
+        }
     }
-  }
+    &.green {
+      color: white;    
+      background-color: rgb(76,217,100);
+        &:hover {
+        background-color: darken(rgb(76,217,100), 5%);
+        }
+    }
 }
 .swipeout-list-item {
 	flex: 1;
