@@ -1,10 +1,12 @@
 <template>
-	<div class="swipeout-list card">
+	<div class="swipeout-list"
+		:class="{'swipeout--disabled': disabled}">
 		<swipe-out
 			v-for="(item, index) in items"
 			:key="item[transitionKey] || index"
 			:ref="`list-item-${index}`"
 			:disabled="disabled"
+			:threshold="threshold"
 			class="swipeout-list-item"
 			@swipeout:click="_emitClick($event, item, index)"
 			@swipeout:dobuleclick="_emitDblClick($event, item)"
@@ -39,6 +41,10 @@
 			transitionKey: {
 				type: String,
 				default: 'id',
+			},
+			threshold: {
+				type: Number,
+				default: 45,
 			},
 			disabled: {
 				type: Boolean,

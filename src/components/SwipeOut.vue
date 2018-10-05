@@ -49,6 +49,9 @@
 				type: Number,
 				default: 45,
 			},
+			/**
+			 * Is the item disabled
+			 */
 			disabled: {
 				type: Boolean,
 				default: false,
@@ -275,7 +278,7 @@
 		},
 	};
 </script>
-<style scoped>
+<style>
 .swipeout {
   position: relative;
   overflow: hidden;
