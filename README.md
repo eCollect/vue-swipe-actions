@@ -1,13 +1,12 @@
 # vue-swipe-actions
 
-**iOS style swipe actions for Vue.js, [Live Demo](https://ecollect.github.io/vue-swipe-actions/)**
+**iOS style swipe actions for Vue.js, [Live Demo](https://ecollect.github.io/vue-swipe-actions/)** ([Source](https://github.com/eCollect/vue-swipe-actions/blob/master/src/App.vue))
 
 ## Installation
 
 ```
-npm install vue-swipe-actions
+npm install --save vue-swipe-actions
 ```
-
 
 ```js
 import { SwipeList, SwipeOut } from 'vue-swipe-actions';
@@ -20,18 +19,40 @@ export default {
 };
 ```
 
+## Basic Usage
+
+### Import Styles
+
+```javascript
+import 'vue-swipe-actions/dist/vue-swipe-actions.css';
+```
+
+### SwipeList
+
+SwipeList component is just a helper for listing multiple SwipeOuts.
+
 #### Props
 
-| Prop    | Data Type | Required | Description        |
-| ------- | --------- | -------- | ------------------ |
-| `items`   | Array    | true     | Your array with data      |
-| `transition-key` | String    |          | Your key for :key when list is v-for-ed, default (id)|
-| `transitionString` | String    |          | Your transition-group string name, default (swipe-list-item)  |
+| Prop             | Data Type | Required|Default| Description        |
+| ---------------- | --------- |-------- |-------|------------------ |
+| `items`          | Array     | *       |       | An array with your data |
+| `transition-key` | String    |         |id     | Your key for :key when list is v-for-ed, if not found array index will used|
+| `disabled`       | Boolean   |         |false  | if true items will be disabled, and text selection will be possible (on desktop). adds class ``swipeout--disabled``  |
+| `threshold`      | Number    |         |45     | With that property you can fine tune when actions are considered open |
 
-#### Basic Usage
+### SwipeOut
+
+SwipeOut is the main component, representing a single item with it's actions.
+
+#### Props
+
+| Prop             | Data Type | Required|Default| Description        |
+| ---------------- | --------- |-------- |-------|------------------ |
+| `disabled`       | Boolean   |         |false  | if true items will be disabled, and text selection will be possible (on desktop). adds class ``swipeout--disabled``  |
+| `threshold`      | Number    |         |45     | With that property you can fine tune when actions are considered open |
 
 ```html
-<swipe-list class="card" :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
+<swipe-list :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
   <template slot-scope="{ item, index, revealLeft, revealRight, close }">
     <!-- item is the corresponding object from the array -->
     <!-- index is clearly the index -->
@@ -46,28 +67,22 @@ export default {
     </div>
   </template>
   <template slot="left" slot-scope="{ item }">
-    <!-- left swipe side template and slot-scope="{ item }" is the item clearly -->
-    <!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
-    <div class="swipeout-action action-panel-left">
-      <div>
+   <!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
+      <div class="swipeout-action">
         <!-- place icon here or what ever you want -->
         <i class="fa fa-cloud"></i>
       </div>
-      <div>
+      <div class="swipeout-action">
         <!-- place icon here or what ever you want -->
         <i class="fa fa-file"></i>
       </div>
-    </div>
   </template>
   <template slot="right" slot-scope="{ item }">
-    <!-- right swipe side template and slot-scope="{ item }" is the item clearly -->
-    <!-- remove <template slot="right" slot-scope="{ item }"> if you dont wanna have right swipe side  -->
-    <div class="swipeout-action action-panel-right">
-      <div>
+      <!-- remove <template slot="right" slot-scope="{ item }"> if you dont wanna have right swipe side  -->
+      <div class="swipeout-action">
         <!-- place icon here or what ever you want -->
         <i class="fa fa-heart"></i>
       </div>
-    </div>
   </template>
   <div slot="empty">
     <!-- change mockSwipeList to an empty array to see this slot in action  -->
@@ -127,71 +142,54 @@ methods: {
 },
 ```
 
-##### SCSS style requires
-```npm install sass-loader node-sass --save-dev```
+### Styling
 
+The default styling is as minimal as possible, defining no visual styles but only functional ones.
+You can overwrite any of the styles if needed.
 
-```scss
-<style lang="scss">
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
-
-.swipeout-list {
-	display: flex;
-	flex-direction: column;
-}
-.swipeout-action {
+```css
+.swipeout {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
   display: flex;
-  > div {
-    display: flex;
-    align-items: center;
-    padding: 0 3rem;
-    cursor: pointer;
-  }
-  &.action-panel-right {
-    > div {
-      background-color: dodgerblue;
-      color: white;
-      &:hover {
-        background-color: darken(dodgerblue, 5%);
-      }
-    }
-  }
-  &.action-panel-left {
-    > div:nth-of-type(even) {
-      background-color: darkorchid;
-      color: white;
-      &:hover {
-        background-color: darken(darkorchid, 5%);
-      }
-    }
-    > div:nth-of-type(odd) {
-      background-color: dodgerblue;
-      color: white;
-      &:hover {
-        background-color: darken(dodgerblue, 5%);
-      }
-    }
-  }
+}
+.swipeout.swipeout--disabled {
+  user-select: auto;
+}
+.swipeout .swipeout-left,
+.swipeout .swipeout-right {
+  position: absolute;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  z-index: 1;
+}
+.swipeout.swipeout--transitioning .swipeout-action,
+.swipeout.swipeout--transitioning .swipeout-content {
+  transition: transform 0.3s;
+}
+.swipeout .swipeout-content {
+  width: 100%;
+}
+.swipeout .swipeout-action,
+.swipeout .swipeout-content {
+  will-change: transform;
+}
+.swipeout .swipeout-left {
+  left: 0;
+  transform: translateX(-100%);
+}
+.swipeout .swipeout-right {
+  right: 0;
+  transform: translateX(100%);
 }
 .swipeout-list-item {
-	flex: 1;
-	border-bottom: 1px solid lightgray;
-	&:last-of-type {
-		border-bottom: none;
-	}
+  outline: none;
 }
-.card {
-  width: 100%;
-	background-color: white;
-	border-radius: 3px;
-	box-shadow: none;
-	border: 1px solid lightgray;
-}
-.card-content {
-  padding: 1rem;
-}
-</style>
 ```
+
 ## Author
 
 &#169; 2018 eCollect AG.
