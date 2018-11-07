@@ -2,10 +2,10 @@
 	<div class="swipeout"
 		:class="{'swipeout--transitioning' : isTransitioning, 'swipeout--disabled': disabled}">
 		<div v-if="hasLeft" class="swipeout-left" ref="left">
-			<slot name="left"></slot>
+			<slot name="left" :close="closeActions"></slot>
 		</div>
 		<div v-if="hasRight" class="swipeout-right" ref="right">
-			<slot name="right"></slot>
+			<slot name="right" :close="closeActions"></slot>
 		</div>
 		<div class="swipeout-content" ref="content" @click="contentClick">
 			<slot :revealRight="revealRight" :revealLeft="revealLeft" :close="closeActions"></slot>
@@ -36,13 +36,21 @@
 				isActive: false,
 				isTransitioning: false,
 				direction: null,
-				hasLeft: 'left' in this.$slots,
-				hasRight: 'right' in this.$slots,
+				// hasLeft: true, //'left' in this.$slots || 'left' in this.$scopedSlots,
+				// hasRight: 'right' in this.$slots,
 				leftOpen: false,
 				rightOpen: false,
 				leftActionsWidth: 0,
 				rightActionsWidth: 0,
 			};
+		},
+		computed: {
+			hasLeft() {
+				return 'left' in this.$slots || 'left' in this.$scopedSlots;
+			},
+			hasRight() {
+				return 'right' in this.$slots || 'right' in this.$scopedSlots;
+			}
 		},
 		props: {
 			threshold: {
