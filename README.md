@@ -66,8 +66,9 @@ SwipeOut is the main component, representing a single item with it's actions.
       <span>{{ index }}</span>
     </div>
   </template>
-  <template slot="left" slot-scope="{ item }">
-   <!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
+  <template slot="left" slot-scope="{ item, close }">
+      <!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
+      <!-- close is method which closes an opened side -->
       <div class="swipeout-action">
         <!-- place icon here or what ever you want -->
         <i class="fa fa-cloud"></i>
@@ -77,8 +78,9 @@ SwipeOut is the main component, representing a single item with it's actions.
         <i class="fa fa-file"></i>
       </div>
   </template>
-  <template slot="right" slot-scope="{ item }">
+  <template slot="right" slot-scope="{ item, close }">
       <!-- remove <template slot="right" slot-scope="{ item }"> if you dont wanna have right swipe side  -->
+      <!-- close is method which closes an opened side -->
       <div class="swipeout-action">
         <!-- place icon here or what ever you want -->
         <i class="fa fa-heart"></i>
