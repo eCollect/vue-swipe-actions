@@ -16,14 +16,14 @@
       </template>
       <!-- left swipe side template and slot-scope="{ item }" is the item clearly -->
       <!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
-      <template slot="left" slot-scope="{ item }">
-        <div class="swipeout-action red">
+      <template slot="left" slot-scope="{ item, close }">
+        <div class="swipeout-action red" @click="remove(item)" title="remove">
           <!-- place icon here or what ever you want -->
-          <i class="fa fa-cloud"></i>
+          <i class="fa fa-trash"></i>
         </div>
-        <div  class="swipeout-action purple">
+        <div  class="swipeout-action purple" @click="close">
           <!-- place icon here or what ever you want -->
-          <i class="fa fa-file"></i>
+          <i class="fa fa-close"></i>
         </div>
       </template>
       <!-- right swipe side template and slot-scope="{ item }" is the item clearly -->
@@ -89,6 +89,10 @@
       window.removeEventListener('keyup', this.onKeyUp);
     },
     methods: {
+      remove(item) {
+        this.mockSwipeList = this.mockSwipeList.filter(i => i!==item);
+        // console.log(e, 'remove');
+      },
       contentClick(e) {
         console.log(e, 'content click');
       },
