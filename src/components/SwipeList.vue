@@ -12,14 +12,14 @@
 			@swipeout:dobuleclick="_emitDblClick($event, item)"
 			@swipeout:contentclick="_contentClick($event, item)"
 		>
-			<template slot="left">
-				<slot name="left" :item="item"></slot>
+			<template slot="left" slot-scope="{ close }">
+				<slot name="left" :item="item" :close="close"></slot>
 			</template>
 			<template slot-scope="{ close, revealRight, revealLeft }">
 				<slot :item="item" :index="index" :close="close" :revealRight="revealRight" :revealLeft="revealLeft"></slot>
 			</template>
-			<template slot="right">
-				<slot name="right" :item="item"></slot>
+			<template slot="right" slot-scope="{ close }">
+				<slot name="right" :item="item" :close="close"></slot>
 			</template>
 		</swipe-out>
 		<template v-if="!items.length">
