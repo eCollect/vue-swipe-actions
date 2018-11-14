@@ -137,7 +137,7 @@
 				return contentRect.left - elementRect.left;
 			},
 			_startListener(event) {
-				if (this.disbaled)
+				if (this.disabled)
 					return null;
 
 				this.isTransitioning = false;
@@ -276,7 +276,7 @@
 			_doubleTap(e) {
 				if (this.disabled)
 					return;
-				this.$emit('swipeout:dobuleclick', e);
+				this.$emit('swipeout:doubleclick', e);
 			},
 			contentClick(e) {
 				if (this.disabled)
