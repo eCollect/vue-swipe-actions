@@ -40,6 +40,15 @@ SwipeList component is just a helper for listing multiple SwipeOuts.
 | `disabled`       | Boolean   |         |false  | if true items will be disabled, and text selection will be possible (on desktop). adds class ``swipeout--disabled``  |
 | `threshold`      | Number    |         |45     | With that property you can fine tune when actions are considered open |
 
+#### Events
+
+| Prop                    | Payload         | Description        |
+| ----------------------- | --------------- | -|
+| `swipeout:click`        | { event, item } | Emitted on single click/tap on the item |
+| `swipeout:doubleclick`  | { event, item } | Emitted on double click/tap on the item |
+| `active`                | Boolean         | Emitted when the user is opening/closing the any of the actions |
+
+
 ### SwipeOut
 
 SwipeOut is the main component, representing a single item with it's actions.
@@ -50,6 +59,14 @@ SwipeOut is the main component, representing a single item with it's actions.
 | ---------------- | --------- |-------- |-------|------------------ |
 | `disabled`       | Boolean   |         |false  | if true items will be disabled, and text selection will be possible (on desktop). adds class ``swipeout--disabled``  |
 | `threshold`      | Number    |         |45     | With that property you can fine tune when actions are considered open |
+
+#### Events
+
+| Prop                    | Payload         | Description        |
+| ----------------------- | --------------- | -|
+| `swipeout:click`        | event | Emitted on single click/tap on the item |
+| `swipeout:doubleclick`  | event | Emitted on double click/tap on the item |
+| `active`                | Boolean         | Emitted when the user is opening/closing the any of the actions |
 
 ```html
 <swipe-list :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
