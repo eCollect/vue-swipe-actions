@@ -8,6 +8,7 @@
 			:disabled="disabled"
 			:threshold="threshold"
 			class="swipeout-list-item"
+			@active="$emit('active', $event)"
 			@swipeout:click="_emitClick($event, item, index)"
 			@swipeout:dobuleclick="_emitDblClick($event, item)"
 			@swipeout:contentclick="_contentClick($event, item)"
