@@ -147,6 +147,7 @@
 
 					this.startLeft = this._distanceSwiped();
 					this.isActive = true;
+					this.$emit('isActive', true);
 
 					if (event.deltaX > 0)
 						this.direction = 'ltr';
@@ -194,6 +195,7 @@
 
 				const oldLeft = this.$refs.content.getBoundingClientRect().left;
 				this.isActive = false;
+				this.$emit('isActive', false);
 
 				// close left actions
 				if (this.startLeft > 0 && event.deltaX <= -this.threshold)
