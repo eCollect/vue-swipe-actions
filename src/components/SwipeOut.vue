@@ -134,7 +134,8 @@
 			_distanceSwiped() {
 				const contentRect = this.$refs.content.getBoundingClientRect();
 				const elementRect = this.$el.getBoundingClientRect();
-				return contentRect.left - elementRect.left;
+				const borderLeft = getComputedStyle(this.$el, null).getPropertyValue("border-left-width");
+				return contentRect.left - elementRect.left - parseFloat(borderLeft);
 			},
 			_startListener(event) {
 				if (this.disabled)
