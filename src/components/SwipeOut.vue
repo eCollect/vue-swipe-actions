@@ -1,5 +1,6 @@
 <template>
 	<div class="swipeout"
+		v-touch-pan.prevent.horizontal="_onPan"
 		:class="{'swipeout--transitioning' : isTransitioning, 'swipeout--disabled': disabled}">
 		<div v-if="hasLeft" class="swipeout-left" ref="left">
 			<slot name="left" :close="closeActions"></slot>
@@ -13,8 +14,7 @@
 	</div>
 </template>
 <script>
-	/* eslint-disable */
-	import Hammer from 'hammerjs';
+	import touchPan from '../directives/touch-horizontal-pan';
 
 	function reduceSwipe(x) {
 		return Math.pow(x, 0.65); // eslint-disable-line
@@ -29,6 +29,9 @@
 
 	export default {
 		name: 'swipe-item',
+		directives: {
+			touchPan,
+		},
 		data() {
 			return {
 				hammer: null,
@@ -36,8 +39,6 @@
 				isActive: false,
 				isTransitioning: false,
 				direction: null,
-				// hasLeft: true, //'left' in this.$slots || 'left' in this.$scopedSlots,
-				// hasRight: 'right' in this.$slots,
 				leftOpen: false,
 				rightOpen: false,
 				leftActionsWidth: 0,
@@ -68,7 +69,6 @@
 		mounted() {
 			if (!this.hasLeft && !this.hasRight)
 				return;
-			this._createHammer();
 		},
 		beforeDestroy() {
 			if (this.hammer)
@@ -103,45 +103,29 @@
 				this._animateSlide(-this.rightActionsWidth, oldLeft);
 			},
 			// private
-			_createHammer() {
-				this.hammer = new Hammer.Manager(this.$el, {
-					touchAction: 'pan-y',
-					cssProps: {
-						userSelect: '',
-					},
-				});
-
-				const doubelTab = new Hammer.Tap({ event: 'doubletap', taps: 2 });
-				this.hammer.add(doubelTab);
-
-				const singleTap = new Hammer.Tap({ event: 'singletap' });
-				this.hammer.add(singleTap);
-
-				doubelTab.recognizeWith(singleTap);
-				singleTap.requireFailure(doubelTab);
-
-				const pan = new Hammer.Pan({ event: 'pan' });
-				this.hammer.add(pan);
-
-				this.hammer.on('singletap', e => this._singleTap(e));
-				this.hammer.on('doubletap', e => this._doubleTap(e));
-
-				this.hammer.get('pan').set({ threshold: 0 });
-				this.hammer.on('panstart', this._startListener);
-				this.hammer.on('panleft panright', this._swipeListener);
-				this.hammer.on('panend', this._stopListener);
-			},
 			_distanceSwiped() {
 				const contentRect = this.$refs.content.getBoundingClientRect();
 				const elementRect = this.$el.getBoundingClientRect();
 				return contentRect.left - elementRect.left - this.$el.clientLeft;
 			},
-			_startListener(event) {
+			_onPan(pan) {
 				if (this.disabled)
 					return null;
 
+				if (pan.isFirst)
+					return this._startListener(pan);
+
+				if (!this.isActive)
+					return null;
+
+				if (pan.isFinal)
+					return this._stopListener(pan);
+
+				return this._swipeListener(pan);
+			},
+			_startListener({ offset, direction }) {
 				this.isTransitioning = false;
-				if (event.deltaY >= -5 && event.deltaY <= 5) {
+				if (offset.y >= -5 && offset.y <= 5) {
 					this.leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
 					this.rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
 
@@ -149,19 +133,13 @@
 					this.isActive = true;
 					this.$emit('active', true);
 
-					if (event.deltaX > 0)
-						this.direction = 'ltr';
-					if (event.deltaX < 0)
-						this.direction = 'rtl';
+					this.direction = direction;
 				}
 
 				this.closeActions();
 			},
-			_swipeListener(event) {
-				if (!this.isActive || this.disabled)
-					return null;
-
-				const newX = this.startLeft + event.deltaX;
+			_swipeListener({ offset }) {
+				const newX = this.startLeft + offset.x;
 
 				// attempting to reveal the right actions after revealing the left actions
 				if (this.startLeft === 0 && this.direction === 'ltr' && newX < 0)
@@ -189,23 +167,20 @@
 
 				return this._animateSlide(newX);
 			},
-			_stopListener(event) {
-				if (!this.isActive || this.disabled)
-					return null;
-
+			_stopListener({ offset }) {
 				const oldLeft = this.$refs.content.getBoundingClientRect().left;
 				this.isActive = false;
 				this.$emit('active', false);
 
 				// close left actions
-				if (this.startLeft > 0 && event.deltaX <= -this.threshold)
+				if (this.startLeft > 0 && offset.x <= -this.threshold)
 					return this.closeActions(); // _animateSlide(0, oldLeft);
 
 				// close right actions
-				if (this.startLeft < 0 && event.deltaX >= this.threshold)
+				if (this.startLeft < 0 && offset.x >= this.threshold)
 					return this.closeActions(); // this._animateSlide(0, oldLeft);
 
-				const currentLeft = this.startLeft + event.deltaX;
+				const currentLeft = this.startLeft + offset.x;
 
 				// reveal left actions
 				if (this.startLeft === 0 && this.direction === 'ltr' && currentLeft >= this.threshold)
@@ -256,7 +231,6 @@
 					child.style.transform = translateX(deltaX - (child.offsetLeft * progress));
 				}
 			},
-
 			_animateSlide(to, from) {
 				if (from) {
 					if ((to - from) === 0)
@@ -292,7 +266,6 @@
 .swipeout {
   position: relative;
   overflow: hidden;
-  user-select: none;
   display: flex;
 }
 

@@ -30,9 +30,6 @@
     "type": "git",
     "url": "https://github.com/eCollect/vue-swipe-actions"
   },
-  "dependencies": {
-    "hammerjs": "^2.0.8"
-  },
   "main": "./dist/vue-swipe-actions.common.js",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.1",
