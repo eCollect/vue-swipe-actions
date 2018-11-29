@@ -134,7 +134,7 @@
 			_distanceSwiped() {
 				const contentRect = this.$refs.content.getBoundingClientRect();
 				const elementRect = this.$el.getBoundingClientRect();
-				return contentRect.left - elementRect.left;
+				return contentRect.left - elementRect.left - this.$el.clientLeft;
 			},
 			_startListener(event) {
 				if (this.disabled)
