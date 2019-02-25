@@ -40,8 +40,8 @@
 				// hasRight: 'right' in this.$slots,
 				leftOpen: false,
 				rightOpen: false,
-				leftActionsWidth: 0,
-				rightActionsWidth: 0,
+				leftActionsWidth: -1,
+				rightActionsWidth: -1,
 			};
 		},
 		computed: {
@@ -81,25 +81,30 @@
 				if (this.isActive)
 					return;
 
+				this.leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
+				this.rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
+				
 				this._animateSlide(0, this._distanceSwiped());
-				this.leftOpen = false;
-				this.rightOpen = false;
+				// this.leftOpen = false;
+				// this.rightOpen = false;
 				this.startLeft = 0;
 			},
 			revealLeft() {
-				if (this.isActive)
+				if (this.isActive || !this.$refs.right)
 					return;
 
+				this.closeActions();
+
 				const oldLeft = this.$refs.content.getBoundingClientRect().left;
-				this.leftOpen = true;
 				this._animateSlide(this.leftActionsWidth, oldLeft);
 			},
 			revealRight() {
-				if (this.isActive)
+				if (this.isActive || this.rightOpen || !this.$refs.right)
 					return;
 
+				this.closeActions();
+
 				const oldLeft = this.$refs.content.getBoundingClientRect().left;
-				this.rightOpen = true;
 				this._animateSlide(-this.rightActionsWidth, oldLeft);
 			},
 			// private
@@ -256,7 +261,6 @@
 					child.style.transform = translateX(deltaX - (child.offsetLeft * progress));
 				}
 			},
-
 			_animateSlide(to, from) {
 				if (from) {
 					if ((to - from) === 0)
