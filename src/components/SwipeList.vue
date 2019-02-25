@@ -4,7 +4,7 @@
 		<swipe-out
 			v-for="(item, index) in items"
 			:key="item[transitionKey] || index"
-			:ref="`list-item-${index}`"
+			:ref="`items`"
 			:disabled="disabled"
 			:threshold="threshold"
 			class="swipeout-list-item"
@@ -53,6 +53,28 @@
 			},
 		},
 		methods: {
+			revealRight(index) {
+				if (!this.$refs.items[index])
+					return;
+				this.$refs.items[index].revealRight();
+			},
+			revealLeft(index) {
+				if (!this.$refs.items[index])
+					return;
+				this.$refs.items[index].revealLeft();
+			},
+			closeActions(index) {
+				if (!this.$refs.items)
+					return;
+
+				if (index === undefined)
+					return this.$refs.items.forEach(i => i.closeActions());
+
+				 if (!this.$refs.items[index])
+					 return;
+					 
+				return this.$refs.items[index].closeActions();
+			},
 			_emitClick(event, item) {
 				this.$emit('swipeout:click', { event, item });
 			},
