@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <swipe-list class="card" :disabled="!enabled" :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
+    <swipe-list ref="list" class="card" :disabled="!enabled" :items="mockSwipeList" transition-key="id" @swipeout:contentclick="contentClick" @swipeout:click="itemClick" @swipeout:doubleclick="itemDblClick">
       <template slot-scope="{ item, index, revealLeft, revealRight, close }">
         <!-- item is the corresponding object from the array -->
         <!-- index is clearly the index -->
@@ -43,6 +43,7 @@
         list is empty ( filtered or just empty )
       </div>
     </swipe-list>
+    <p><button @click="revealFirstLeft">reveal 1st left</button> <button @click="revealFirstRight">reveal 1st right</button>  <button @click="closeFirst">close 1st</button>  <button @click="closeAll">close all</button></p>
     <p><small><i>Press and hold [shift] to select text</i></small></p>
   </div>
 </template>
@@ -89,6 +90,18 @@
       window.removeEventListener('keyup', this.onKeyUp);
     },
     methods: {
+      revealFirstRight() {
+        this.$refs.list.revealRight(0);
+      },
+      revealFirstLeft() {
+        this.$refs.list.revealLeft(0);
+      },
+      closeFirst() {
+        this.$refs.list.closeActions(0);
+      },
+      closeAll() {
+        this.$refs.list.closeActions();
+      },
       remove(item) {
         this.mockSwipeList = this.mockSwipeList.filter(i => i!==item);
         // console.log(e, 'remove');
