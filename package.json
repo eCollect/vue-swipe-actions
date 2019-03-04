@@ -1,7 +1,7 @@
 {
   "name": "vue-swipe-actions",
   "description": "iOS style swipe actions",
-  "version": "1.0.10",
+  "version": "1.0.21",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -32,11 +32,11 @@
   },
   "main": "./dist/vue-swipe-actions.common.js",
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.1.1",
-    "@vue/cli-plugin-eslint": "^3.1.4",
-    "@vue/cli-service": "^3.1.3",
-    "gh-pages-deploy": "^0.5.0",
-    "node-sass": "^4.10.0",
+    "@vue/cli-plugin-babel": "^3.4.1",
+    "@vue/cli-plugin-eslint": "^3.4.1",
+    "@vue/cli-service": "^3.4.1",
+    "gh-pages-deploy": "^0.5.1",
+    "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.5.17"
   },

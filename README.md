@@ -42,11 +42,19 @@ SwipeList component is just a helper for listing multiple SwipeOuts.
 
 #### Events
 
-| Prop                    | Payload         | Description        |
+| Event                    | Payload         | Description        |
 | ----------------------- | --------------- | -|
 | `swipeout:click`        | { event, item } | Emitted on single click/tap on the item |
 | `swipeout:doubleclick`  | { event, item } | Emitted on double click/tap on the item |
 | `active`                | Boolean         | Emitted when the user is opening/closing the any of the actions |
+
+#### Methods
+
+| Method                  | Params          | Description        |
+| ----------------------- | --------------- | -|
+| `revealRight`           | index (number)  | Reveals right actions on given index |
+| `revealLeft`            | index (number)  | Reveals left actions on given index |
+| `closeActions`          | index (number)? | Closes actions on given index, or all if no index given |
 
 
 ### SwipeOut
