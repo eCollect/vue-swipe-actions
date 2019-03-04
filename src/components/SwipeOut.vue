@@ -1,14 +1,16 @@
 <template>
-	<div class="swipeout"
-		v-touch-pan.prevent.horizontal="_onPan"
-		:class="{'swipeout--transitioning' : isTransitioning, 'swipeout--disabled': disabled}">
-		<div v-if="hasLeft" class="swipeout-left" ref="left">
+	<div
+		v-touch-pan.horizontal.prevent.mouse.mousePrevent="_onPan"
+		class="swipeout"
+		:class="{'swipeout--transitioning' : isTransitioning, 'swipeout--disabled': disabled}"
+	>
+		<div v-if="hasLeft" ref="left" class="swipeout-left">
 			<slot name="left" :close="closeActions"></slot>
 		</div>
-		<div v-if="hasRight" class="swipeout-right" ref="right">
+		<div v-if="hasRight" ref="right" class="swipeout-right">
 			<slot name="right" :close="closeActions"></slot>
 		</div>
-		<div class="swipeout-content" ref="content" @click="contentClick">
+		<div ref="content" class="swipeout-content" @click="contentClick">
 			<slot :revealRight="revealRight" :revealLeft="revealLeft" :close="closeActions"></slot>
 		</div>
 	</div>
@@ -16,9 +18,11 @@
 <script>
 	import touchPan from '../directives/touch-horizontal-pan';
 
+	/*
 	function reduceSwipe(x) {
 		return Math.pow(x, 0.65); // eslint-disable-line
 	}
+	*/
 
 	function translateX(x) {
 		if (x === 0)
@@ -28,30 +32,9 @@
 	}
 
 	export default {
-		name: 'swipe-item',
+		name: 'SwipeItem',
 		directives: {
 			touchPan,
-		},
-		data() {
-			return {
-				hammer: null,
-				startLeft: 0,
-				isActive: false,
-				isTransitioning: false,
-				direction: null,
-				leftOpen: false,
-				rightOpen: false,
-				leftActionsWidth: -1,
-				rightActionsWidth: -1,
-			};
-		},
-		computed: {
-			hasLeft() {
-				return 'left' in this.$slots || 'left' in this.$scopedSlots;
-			},
-			hasRight() {
-				return 'right' in this.$slots || 'right' in this.$scopedSlots;
-			}
 		},
 		props: {
 			threshold: {
@@ -64,16 +47,26 @@
 			disabled: {
 				type: Boolean,
 				default: false,
-			}	
+			},
 		},
-		mounted() {
-			if (!this.hasLeft && !this.hasRight)
-				return;
+		data() {
+			return {
+				hammer: null,
+				startLeft: 0,
+				isActive: false,
+				isTransitioning: false,
+				direction: null,
+				leftOpen: false,
+				rightOpen: false,
+			};
 		},
-		beforeDestroy() {
-			if (this.hammer)
-				this.hammer.destroy();
-			this.hammer = null;
+		computed: {
+			hasLeft() {
+				return 'left' in this.$slots || 'left' in this.$scopedSlots;
+			},
+			hasRight() {
+				return 'right' in this.$slots || 'right' in this.$scopedSlots;
+			},
 		},
 		methods: {
 			// public
@@ -81,13 +74,10 @@
 				if (this.isActive)
 					return;
 
-				this.leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
-				this.rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
-				
+				this._leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
+				this._rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
+
 				this._animateSlide(0, this._distanceSwiped());
-				// this.leftOpen = false;
-				// this.rightOpen = false;
-				this.startLeft = 0;
 			},
 			revealLeft() {
 				if (this.isActive || !this.$refs.right)
@@ -96,7 +86,7 @@
 				this.closeActions();
 
 				const oldLeft = this.$refs.content.getBoundingClientRect().left;
-				this._animateSlide(this.leftActionsWidth, oldLeft);
+				this._animateSlide(this._leftActionsWidth, oldLeft);
 			},
 			revealRight() {
 				if (this.isActive || this.rightOpen || !this.$refs.right)
@@ -105,7 +95,7 @@
 				this.closeActions();
 
 				const oldLeft = this.$refs.content.getBoundingClientRect().left;
-				this._animateSlide(-this.rightActionsWidth, oldLeft);
+				this._animateSlide(-this._rightActionsWidth, oldLeft);
 			},
 			// private
 			_distanceSwiped() {
@@ -131,85 +121,55 @@
 			_startListener({ offset, direction }) {
 				this.isTransitioning = false;
 				if (offset.y >= -5 && offset.y <= 5) {
-					this.leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
-					this.rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
+					this._leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
+					this._rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
 
 					this.startLeft = this._distanceSwiped();
 					this.isActive = true;
 					this.$emit('active', true);
 
 					this.direction = direction;
+
+					this.__dir = null;
+					this.__scale = 0;
 				}
 
 				this.closeActions();
 			},
 			_swipeListener({ offset }) {
-				const newX = this.startLeft + offset.x;
-
-				// attempting to reveal the right actions after revealing the left actions
-				if (this.startLeft === 0 && this.direction === 'ltr' && newX < 0)
-					return this._animateSlide(-reduceSwipe(-newX));
-
-				// attempting to reveal the left actions after revealing the right actions
-				if (this.startLeft === 0 && this.direction === 'rtl' && newX > 0)
-					return this._animateSlide(reduceSwipe(newX));
-
-				// attempting to reveal the right actions after starting with the left actions revealed
-				if (this.startLeft < 0 && newX > 0)
-					return this._animateSlide(reduceSwipe(newX));
-
-				// attempting to reveal the left actions after starting with the right actions revealed
-				if (this.startLeft > 0 && newX < 0)
-					return this._animateSlide(-reduceSwipe(-newX));
-
-				// overswiping left-to-right
-				if (newX < -this.rightActionsWidth)
-					return this._animateSlide(-(this.rightActionsWidth + reduceSwipe(Math.abs(newX + this.rightActionsWidth))));
-
-				if (newX > this.leftActionsWidth)
-					return this._animateSlide(+(this.leftActionsWidth + reduceSwipe(newX - this.leftActionsWidth)));
-
-
-				return this._animateSlide(newX);
+				return this._animateSlide(offset.x + this.startLeft);
 			},
-			_stopListener({ offset }) {
-				const oldLeft = this.$refs.content.getBoundingClientRect().left;
+			_stopListener({ offset, distance }) {
 				this.isActive = false;
 				this.$emit('active', false);
+				const newX = this.startLeft + offset.x;
 
-				// close left actions
-				if (this.startLeft > 0 && offset.x <= -this.threshold)
-					return this.closeActions(); // _animateSlide(0, oldLeft);
+				const shouldClose = (this.startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this.startLeft > 0 && distance.x < this._leftActionsWidth) || (this.startLeft < 0 && distance.x < this._rightActionsWidth)));
 
-				// close right actions
-				if (this.startLeft < 0 && offset.x >= this.threshold)
-					return this.closeActions(); // this._animateSlide(0, oldLeft);
+				// const shouldClose = this.startLeft === 0 ? Math.abs(newX) <= this.threshold : distance.x >= this.threshold;
 
-				const currentLeft = this.startLeft + offset.x;
+				if (shouldClose)
+					return this._animateSlide(0, true);
 
-				// reveal left actions
-				if (this.startLeft === 0 && this.direction === 'ltr' && currentLeft >= this.threshold)
-					return this._animateSlide(this.leftActionsWidth, oldLeft);
-
-				// reveal right actions
-				if (this.startLeft === 0 && this.direction === 'rtl' && currentLeft <= -this.threshold)
-					return this._animateSlide(-this.rightActionsWidth, oldLeft);
-
-				return this._animateSlide(this.startLeft, oldLeft);
+				return this._animateSlide(newX > 0 ? this._leftActionsWidth : -this._rightActionsWidth, true);
 			},
+
 			// shift actions
 			_shiftLeftActions(newX) {
-				if (!this.hasLeft || newX < 0)
+				if (!this.hasLeft)
 					return;
 
+				if (newX < 0)
+					newX = 0;
+
 				const actions = this.$refs.left;
-				const actionsWidth = this.leftActionsWidth;
+				const actionsWidth = this._leftActionsWidth;
 
 				const progress = 1 - Math.min(newX / actionsWidth, 1);
 				const deltaX = Math.min(newX, actionsWidth);
 
-				const children = actions.children;
-				const length = children.length;
+				const { children } = actions;
+				const { length } = children;
 				for (let i = 0; i < length; i++) {
 					const child = children[i];
 					const offsetLeft = actionsWidth - child.offsetLeft - child.offsetWidth;
@@ -220,33 +180,33 @@
 				}
 			},
 			_shiftRightActions(newX) {
-				if (!this.hasRight || newX > 0)
+				if (!this.hasRight)
 					return;
+
+				if (newX > 0)
+					newX = 0;
 
 				const actions = this.$refs.right;
 
-				const actionsWidth = this.rightActionsWidth;
+				const actionsWidth = this._rightActionsWidth;
 
 				const progress = 1 + Math.max(newX / actionsWidth, -1);
 				const deltaX = Math.max(newX, -actionsWidth);
-				const children = actions.children;
-				
+				const { children } = actions;
+
 				for (let i = 0; i < children.length; i++) {
 					const child = children[i];
 					child.style.transform = translateX(deltaX - (child.offsetLeft * progress));
 				}
 			},
 			_animateSlide(to, from) {
-				if (from) {
-					if ((to - from) === 0)
-						return;
+				if (from)
 					this.isTransitioning = true;
-				}
 
-				window.requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
 					this.$refs.content.style.transform = translateX(to);
-					this._shiftLeftActions(to, this.leftActionsWidth);
-					this._shiftRightActions(to, this.rightActionsWidth);
+					this._shiftLeftActions(to);
+					this._shiftRightActions(to);
 				});
 			},
 			_singleTap(e) {

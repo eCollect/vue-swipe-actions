@@ -1,188 +1,256 @@
-// taken from https://github.com/quasarframework/quasar/blob/v1-work/src/utils/event.js
+import { position, leftClick, listenOpts } from '../utils/event';
+import { setObserver, removeObserver } from '../utils/touch-observer';
+import { clearSelection } from '../utils/selection';
 
-const listenOpts = {};
+function getDirection(mod) {
+	const none = mod.horizontal !== true && mod.vertical !== true;
+	const dir = {
+		all: none === true || (mod.horizontal === true && mod.vertical === true),
+	};
 
-Object.defineProperty(listenOpts, "passive", {
-  configurable: true,
-  get() {
-    let passive;
+	if (mod.horizontal === true || none === true)
+		dir.horizontal = true;
 
-    try {
-      var opts = Object.defineProperty({}, "passive", {
-        get() {
-          passive = { passive: true };
-        }
-      });
-      window.addEventListener("qtest", null, opts);
-      window.removeEventListener("qtest", null, opts);
-    } catch (e) {
-      // do nothing
-    }
+	if (mod.vertical === true || none === true)
+		dir.vertical = true;
 
-    listenOpts.passive = passive;
-    return passive;
-  },
-  set(val) {
-    Object.defineProperty(this, "passive", {
-      value: val
-    });
-  }
-});
 
-function position(e) {
-  if (e.touches && e.touches[0]) {
-    e = e.touches[0];
-  } else if (e.changedTouches && e.changedTouches[0]) {
-    e = e.changedTouches[0];
-  }
-
-  return {
-    top: e.clientY,
-    left: e.clientX
-  };
+	return dir;
 }
-
-const leftClick = e  => e.button === 0;
 
 function processChanges(evt, ctx, isFinal) {
-  const pos = position(evt);
-  const distX = pos.left - ctx.event.x;
-  const distY = pos.top - ctx.event.y;
-  const direction = distX < 0 ? "rtl" : "ltr";
+	const
+		pos = position(evt);
+	let direction;
+	const distX = pos.left - ctx.event.x;
+	const distY = pos.top - ctx.event.y;
+	const absDistX = Math.abs(distX);
+	const absDistY = Math.abs(distY);
 
-  return {
-    evt,
-    direction,
-    isFirst: ctx.event.isFirst,
-    isFinal,
-    offset: {
-      x: distX,
-      y: distY
-    },
-  };
+	if (ctx.direction.horizontal && !ctx.direction.vertical)
+		direction = distX < 0 ? 'left' : 'right';
+	else if (!ctx.direction.horizontal && ctx.direction.vertical)
+		direction = distY < 0 ? 'up' : 'down';
+	else if (absDistX >= absDistY)
+		direction = distX < 0 ? 'left' : 'right';
+	else
+		direction = distY < 0 ? 'up' : 'down';
+
+
+	return {
+		evt,
+		position: pos,
+		direction,
+		isFirst: ctx.event.isFirst,
+		isFinal: isFinal === true,
+		isMouse: ctx.event.mouse,
+		duration: new Date().getTime() - ctx.event.time,
+		distance: {
+			x: absDistX,
+			y: absDistY,
+		},
+		offset: {
+			x: distX,
+			y: distY,
+		},
+		delta: {
+			x: pos.left - ctx.event.lastX,
+			y: pos.top - ctx.event.lastY,
+		},
+	};
 }
 
-const shouldTrigger = changes => Math.abs(changes.offset.x) > 0;
+function shouldTrigger(ctx, changes) {
+	if (ctx.direction.horizontal && ctx.direction.vertical)
+		return true;
+
+	if (ctx.direction.horizontal && !ctx.direction.vertical)
+		return Math.abs(changes.delta.x) > 0;
+
+	if (!ctx.direction.horizontal && ctx.direction.vertical)
+		return Math.abs(changes.delta.y) > 0;
+
+	return undefined;
+}
 
 export default {
-  name: "touch-pan",
+	name: 'touch-pan',
 
-  bind(el, binding) {
-    const mouse = binding.modifiers.noMouse !== true,
-      stopPropagation = binding.modifiers.stop,
-      preventDefault = binding.modifiers.prevent,
-      evtOpts =
-        preventDefault || binding.modifiers.mightPrevent
-          ? null
-          : listenOpts.passive;
+	bind(el, binding) {
+		const
+			mouse = binding.modifiers.mouse === true;
+		const mouseEvtPassive = binding.modifiers.mouseMightPrevent !== true && binding.modifiers.mousePrevent !== true;
+		const mouseEvtOpts = listenOpts.passive === undefined ? true : { passive: mouseEvtPassive, capture: true };
+		const touchEvtPassive = binding.modifiers.mightPrevent !== true && binding.modifiers.prevent !== true;
+		const touchEvtOpts = touchEvtPassive ? listenOpts.passive : null;
 
-    let ctx = {
-      handler: binding.value,
-      mouseStart(evt) {
-        if (leftClick(evt)) {
-          document.addEventListener("mousemove", ctx.move, evtOpts);
-          document.addEventListener("mouseup", ctx.mouseEnd, evtOpts);
-          ctx.start(evt);
-        }
-      },
+		function handleEvent(evt, mouseEvent) {
+			if (mouse && mouseEvent) {
+				if (binding.modifiers.mouseStop) evt.stopPropagation();
+				if (binding.modifiers.mousePrevent) evt.preventDefault();
+			} else {
+				if (binding.modifiers.stop) evt.stopPropagation();
+				if (binding.modifiers.prevent) evt.preventDefault();
+			}
+		}
 
-      mouseEnd(evt) {
-        document.removeEventListener("mousemove", ctx.move, evtOpts);
-        document.removeEventListener("mouseup", ctx.mouseEnd, evtOpts);
-        ctx.end(evt);
-      },
+		const ctx = {
+			handler: binding.value,
+			direction: getDirection(binding.modifiers),
 
-      start(evt) {
-        const pos = position(evt);
+			mouseStart(evt) {
+				if (leftClick(evt)) {
+					document.addEventListener('mousemove', ctx.move, mouseEvtOpts);
+					document.addEventListener('mouseup', ctx.mouseEnd, mouseEvtOpts);
+					ctx.start(evt, true);
+				}
+			},
 
-        ctx.event = {
-          x: pos.left,
-          y: pos.top,
-          time: new Date().getTime(),
-          detected: false,
-          abort: false,
-          isFirst: true,
-        };
-      },
+			mouseEnd(evt) {
+				document.removeEventListener('mousemove', ctx.move, mouseEvtOpts);
+				document.removeEventListener('mouseup', ctx.mouseEnd, mouseEvtOpts);
+				ctx.end(evt);
+			},
 
-      move(evt) {
-        if (ctx.event.abort) {
-          return;
-        }
+			start(evt, mouseEvent) {
+				removeObserver(ctx);
+				if (mouseEvent !== true)
+					setObserver(el, evt, ctx);
 
-        if (ctx.event.detected) {
-          stopPropagation && evt.stopPropagation();
-          preventDefault && evt.preventDefault();
+				const pos = position(evt);
 
-          const changes = processChanges(evt, ctx, false);
-          if (shouldTrigger(changes)) {
-            ctx.handler(changes);
-            ctx.event.isFirst = false;
-          }
+				ctx.event = {
+					x: pos.left,
+					y: pos.top,
+					time: new Date().getTime(),
+					mouse: mouseEvent === true,
+					detected: false,
+					abort: false,
+					isFirst: true,
+					isFinal: false,
+					lastX: pos.left,
+					lastY: pos.top,
+				};
+			},
 
-          return;
-        }
+			move(evt) {
+				if (ctx.event.abort === true)
+					return;
 
-        const pos = position(evt),
-          distX = Math.abs(pos.left - ctx.event.x),
-          distY = Math.abs(pos.top - ctx.event.y);
 
-        if (distX === distY) {
-          return;
-        }
+				if (ctx.event.detected === true) {
+					handleEvent(evt, ctx.event.mouse);
 
-        ctx.event.detected = true;
-        ctx.event.abort = distX < distY;
+					const changes = processChanges(evt, ctx, false);
+					if (shouldTrigger(ctx, changes)) {
+						ctx.handler(changes);
+						ctx.event.lastX = changes.position.left;
+						ctx.event.lastY = changes.position.top;
+						ctx.event.isFirst = false;
+					}
 
-        ctx.move(evt);
-      },
+					return;
+				}
 
-      end(evt) {
-        el.classList.remove("q-touch");
-        if (ctx.event.abort || !ctx.event.detected || ctx.event.isFirst) {
-          return;
-        }
+				const
+					pos = position(evt);
+				const distX = Math.abs(pos.left - ctx.event.x);
+				const distY = Math.abs(pos.top - ctx.event.y);
 
-        stopPropagation && evt.stopPropagation();
-        preventDefault && evt.preventDefault();
-        ctx.handler(processChanges(evt, ctx, true));
-      }
-    };
+				if (distX === distY)
+					return;
 
-    if (el.__qtouchpan) {
-      el.__qtouchpan_old = el.__qtouchpan;
-    }
 
-    el.__qtouchpan = ctx;
+				ctx.event.detected = true;
 
-    if (mouse) {
-      el.addEventListener("mousedown", ctx.mouseStart, evtOpts);
-    }
-    el.addEventListener("touchstart", ctx.start, evtOpts);
-    el.addEventListener("touchmove", ctx.move, evtOpts);
-    el.addEventListener("touchend", ctx.end, evtOpts);
-  },
+				if (ctx.direction.all === false && (ctx.event.mouse === false || binding.modifiers.mouseAllDir !== true))
+					ctx.event.abort = ctx.direction.vertical
+						? distX > distY
+						: distX < distY;
 
-  update(el, { oldValue, value }) {
-    const ctx = el.__qtouchpan;
 
-    if (oldValue !== value) {
-      ctx.handler = value;
-    }
-  },
+				if (ctx.event.abort !== true) {
+					document.documentElement.style.cursor = 'grabbing';
+					document.body.classList.add('no-pointer-events');
+					document.body.classList.add('non-selectable');
+					clearSelection();
+				}
 
-  unbind(el, binding) {
-    let ctx = el.__qtouchpan_old || el.__qtouchpan;
-    if (ctx !== void 0) {
-      const evtOpts = binding.modifiers.prevent ? null : listenOpts.passive;
+				ctx.move(evt);
+			},
 
-      el.removeEventListener("mousedown", ctx.mouseStart, evtOpts);
+			end(evt) {
+				if (ctx.event.mouse !== true) removeObserver(ctx);
 
-      el.removeEventListener("touchstart", ctx.start, evtOpts);
-      el.removeEventListener("touchmove", ctx.move, evtOpts);
-      el.removeEventListener("touchend", ctx.end, evtOpts);
+				document.documentElement.style.cursor = '';
+				document.body.classList.remove('no-pointer-events');
+				document.body.classList.remove('non-selectable');
 
-      delete el[el.__qtouchpan_old ? "__qtouchpan_old" : "__qtouchpan"];
-    }
-  }
+				if (ctx.event.abort === true || ctx.event.detected !== true || ctx.event.isFirst === true)
+					return;
+
+
+				handleEvent(evt, ctx.event.mouse);
+				ctx.handler(processChanges(evt, ctx, true));
+			},
+		};
+
+		if (el.__qtouchpan)
+			el.__qtouchpan_old = el.__qtouchpan;
+
+
+		el.__qtouchpan = ctx;
+
+		if (mouse === true)
+			el.addEventListener('mousedown', ctx.mouseStart, mouseEvtOpts);
+
+		el.addEventListener('touchstart', ctx.start, touchEvtOpts);
+		el.addEventListener('touchmove', ctx.move, touchEvtOpts);
+		el.addEventListener('touchcancel', ctx.end, touchEvtOpts);
+		el.addEventListener('touchend', ctx.end, touchEvtOpts);
+	},
+
+	update(el, { oldValue, value, modifiers }) {
+		const ctx = el.__qtouchpan;
+
+		if (oldValue !== value)
+			ctx.handler = value;
+
+
+		if (
+			(modifiers.horizontal !== ctx.direction.horizontal)
+      || (modifiers.vertical !== ctx.direction.vertical)
+		)
+			ctx.direction = getDirection(modifiers);
+	},
+
+	unbind(el, binding) {
+		const ctx = el.__qtouchpan_old || el.__qtouchpan;
+		if (ctx !== undefined) {
+			removeObserver(ctx);
+
+			document.documentElement.style.cursor = '';
+			document.body.classList.remove('no-pointer-events');
+			document.body.classList.remove('non-selectable');
+
+			const
+				mouse = binding.modifiers.mouse === true;
+			const mouseEvtPassive = binding.modifiers.mouseMightPrevent !== true && binding.modifiers.mousePrevent !== true;
+			const mouseEvtOpts = listenOpts.passive === undefined ? true : { passive: mouseEvtPassive, capture: true };
+			const touchEvtPassive = binding.modifiers.mightPrevent !== true && binding.modifiers.prevent !== true;
+			const touchEvtOpts = touchEvtPassive ? listenOpts.passive : null;
+
+			if (mouse === true) {
+				el.removeEventListener('mousedown', ctx.mouseStart, mouseEvtOpts);
+				document.removeEventListener('mousemove', ctx.move, mouseEvtOpts);
+				document.removeEventListener('mouseup', ctx.mouseEnd, mouseEvtOpts);
+			}
+			el.removeEventListener('touchstart', ctx.start, touchEvtOpts);
+			el.removeEventListener('touchmove', ctx.move, touchEvtOpts);
+			el.removeEventListener('touchcancel', ctx.end, touchEvtOpts);
+			el.removeEventListener('touchend', ctx.end, touchEvtOpts);
+
+			delete el[el.__qtouchpan_old ? '__qtouchpan_old' : '__qtouchpan'];
+		}
+	},
 };

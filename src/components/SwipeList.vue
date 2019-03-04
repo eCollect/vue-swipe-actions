@@ -1,6 +1,8 @@
 <template>
-	<div class="swipeout-list"
-		:class="{'swipeout--disabled': disabled}">
+	<div
+		class="swipeout-list"
+		:class="{'swipeout--disabled': disabled}"
+	>
 		<swipe-out
 			v-for="(item, index) in items"
 			:key="item[transitionKey] || index"
@@ -17,14 +19,22 @@
 				<slot name="left" :item="item" :close="close"></slot>
 			</template>
 			<template slot-scope="{ close, revealRight, revealLeft }">
-				<slot :item="item" :index="index" :close="close" :revealRight="revealRight" :revealLeft="revealLeft"></slot>
+				<slot
+					:item="item"
+					:index="index"
+					:close="close"
+					:revealRight="revealRight"
+					:revealLeft="revealLeft"
+				></slot>
 			</template>
 			<template slot="right" slot-scope="{ close }">
 				<slot name="right" :item="item" :close="close"></slot>
 			</template>
 		</swipe-out>
 		<template v-if="!items.length">
-			<slot name="empty">No results !</slot>
+			<slot name="empty">
+				No results !
+			</slot>
 		</template>
 	</div>
 </template>
@@ -72,7 +82,7 @@
 
 				 if (!this.$refs.items[index])
 					 return;
-					 
+
 				return this.$refs.items[index].closeActions();
 			},
 			_emitClick(event, item) {
