@@ -1,7 +1,7 @@
 {
   "name": "vue-swipe-actions",
   "description": "iOS style swipe actions",
-  "version": "1.0.21",
+  "version": "2.0.0-beta.1",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -17,7 +17,7 @@
     ]
   },
   "author": {
-    "name": "eCollect Sofia Tech Team"
+    "name": "eCollect AG"
   },
   "keywords": [
     "vuejs",
@@ -30,21 +30,21 @@
     "type": "git",
     "url": "https://github.com/eCollect/vue-swipe-actions"
   },
-  "dependencies": {
-    "hammerjs": "^2.0.8"
-  },
   "main": "./dist/vue-swipe-actions.common.js",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.1",
     "@vue/cli-plugin-eslint": "^3.4.1",
     "@vue/cli-service": "^3.4.1",
+    "eslint": "^5.15.1",
+    "eslint-config-ecollect-vue": "^0.1.0-beta.1",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-vue": "^5.2.2",
     "gh-pages-deploy": "^0.5.1",
-    "node-sass": "^4.11.0",
-    "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.6.x"
   },
   "peerDependencies": {
-    "vue": "^2.5.x"
+    "vue": "^2.6.x"
   },
   "babel": {
     "presets": [
@@ -52,20 +52,6 @@
     ]
   },
   "license": "MIT",
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
   "postcss": {
     "plugins": {
       "autoprefixer": {}
@@ -74,10 +60,14 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not ie <= 8"
+    "not ie <= 11"
   ],
   "files": [
     "dist/vue-swipe-actions.common.js",
     "dist/vue-swipe-actions.css"
-  ]
+  ],
+  "dependencies": {
+    "babel-eslint": "^10.0.1",
+    "vue": "^2.6.8"
+  }
 }

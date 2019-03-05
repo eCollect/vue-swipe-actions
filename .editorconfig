@@ -1,0 +1,34 @@
+root = true
+
+# @see editorconfig.org
+
+root = true
+
+[*]
+indent_style = tab
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.json]
+indent_size = 2
+
+[*.js]
+indent_size = 4
+
+[*.tag]
+indent_size = 2
+
+[*.yml]
+indent_size = 2
+
+# Trailing whitespace is significant in markdown files.
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 80
+
+[Makefile]
+indent_style = tab
+indent_size = 4

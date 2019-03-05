@@ -1,7 +1,7 @@
-import SwipeOut from '../components/SwipeOut';
-import SwipeList from '../components/SwipeList';
+import SwipeOut from './SwipeOut';
+import SwipeList from './SwipeList';
 
 export {
-  SwipeOut,
-  SwipeList,
+	SwipeOut,
+	SwipeList,
 };
