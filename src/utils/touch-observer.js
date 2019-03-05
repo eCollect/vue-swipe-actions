@@ -1,3 +1,4 @@
+// taken from https://github.com/quasarframework/quasar/blob/dev/quasar/src/utils/touch-observer.js
 export function setObserver(el, evt, ctx) {
 	const { target } = evt;
 	ctx.touchTargetObserver = new MutationObserver(() => {

@@ -1,3 +1,4 @@
+// adpoted from https://github.com/quasarframework/quasar/blob/dev/quasar/src/utils/event.js
 export const listenOpts = {};
 Object.defineProperty(listenOpts, 'passive', {
 	configurable: true,
@@ -31,14 +32,6 @@ export function leftClick(e) {
 	return e.button === 0;
 }
 
-export function middleClick(e) {
-	return e.button === 1;
-}
-
-export function rightClick(e) {
-	return e.button === 2;
-}
-
 export function position(e) {
 	if (e.touches && e.touches[0])
 		// eslint-disable-next-line prefer-destructuring
@@ -54,74 +47,8 @@ export function position(e) {
 	};
 }
 
-export function getEventPath(e) {
-	if (e.path)
-		return e.path;
-
-	if (e.composedPath)
-		return e.composedPath();
-
-
-	const path = [];
-	let el = e.target;
-
-	while (el) {
-		path.push(el);
-
-		if (el.tagName === 'HTML') {
-			path.push(document);
-			path.push(window);
-			return path;
-		}
-
-		el = el.parentElement;
-	}
-	return null;
-}
-
-// Reasonable defaults
-const LINE_HEIGHT = 40;
-const PAGE_HEIGHT = 800;
-
-export function getMouseWheelDistance(e) {
-	let x = e.deltaX; let
-		y = e.deltaY;
-
-	if ((x || y) && e.deltaMode) {
-		const multiplier = e.deltaMode === 1 ? LINE_HEIGHT : PAGE_HEIGHT;
-		x *= multiplier;
-		y *= multiplier;
-	}
-
-	if (e.shiftKey && !x)
-		[y, x] = [x, y];
-
-
-	return { x, y };
-}
-
-export function stop(e) {
-	e.stopPropagation();
-}
-
-export function prevent(e) {
-	e.preventDefault();
-}
-
-export function stopAndPrevent(e) {
-	e.preventDefault();
-	e.stopPropagation();
-}
-
 export default {
-	listenOpts,
-	leftClick,
-	middleClick,
-	rightClick,
 	position,
-	getEventPath,
-	getMouseWheelDistance,
-	stop,
-	prevent,
-	stopAndPrevent,
+	leftClick,
+	listenOpts,
 };

@@ -1,6 +1,6 @@
+// adopted from https://github.com/quasarframework/quasar/blob/dev/quasar/src/directives/TouchPan.js
 import { position, leftClick, listenOpts } from '../utils/event';
 import { setObserver, removeObserver } from '../utils/touch-observer';
-import { clearSelection } from '../utils/selection';
 
 function getDirection(mod) {
 	const none = mod.horizontal !== true && mod.vertical !== true;
@@ -173,7 +173,7 @@ export default {
 					document.documentElement.style.cursor = 'grabbing';
 					document.body.classList.add('no-pointer-events');
 					document.body.classList.add('non-selectable');
-					clearSelection();
+					// clearSelection();
 				}
 
 				ctx.move(evt);
