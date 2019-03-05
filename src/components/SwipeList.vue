@@ -5,18 +5,18 @@
 	>
 		<swipe-out
 			v-for="(item, index) in items"
-			:key="item[transitionKey] || index"
+			:key="item[itemKey] || index"
 			:ref="`items`"
 			:disabled="disabled"
 			:threshold="threshold"
 			class="swipeout-list-item"
 			@active="$emit('active', $event)"
 		>
-			<template slot="left" slot-scope="{ close }">
-				<slot name="left" :item="item" :close="close"></slot>
+			<template v-if="$scopedSlots.left" v-slot:left="{ close }">
+				<slot name="left" :item="item" :close="close" />
 			</template>
 			<template v-slot="{ close, revealRight, revealLeft }">
-				<div @click="_emitClick($event, item, index)">
+				<div @click="$emit('swipeout:click', item)">
 					<slot
 						:item="item"
 						:index="index"
@@ -26,8 +26,8 @@
 					/>
 				</div>
 			</template>
-			<template slot="right" slot-scope="{ close }">
-				<slot name="right" :item="item" :close="close"></slot>
+			<template v-if="$scopedSlots.right" v-slot:right="{ close }">
+				<slot name="right" :item="item" :close="close" />
 			</template>
 		</swipe-out>
 		<template v-if="!items.length">
@@ -48,7 +48,7 @@
 				type: Array,
 				required: true,
 			},
-			transitionKey: {
+			itemKey: {
 				type: String,
 				default: 'id',
 			},
@@ -83,15 +83,6 @@
 					 return;
 
 				return this.$refs.items[index].closeActions();
-			},
-			_emitClick(event, item) {
-				console.log('hi');
-			},
-			_emitDblClick(event, item) {
-				this.$emit('swipeout:doubleclick', { event, item });
-			},
-			_contentClick(event, item) {
-                this.$emit('swipeout:contentclick', { event, item });
 			},
 		},
 		components: {

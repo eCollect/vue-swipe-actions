@@ -39,7 +39,7 @@
 
 .non-selectable {
 	user-select: none !important;
-  }
+}
 
 .no-pointer-events {
 	pointer-events: none !important;
@@ -52,4 +52,6 @@
 	flex-direction: column;
 }
 
-
+.swipeout-list-item {
+	flex: 1;
+}

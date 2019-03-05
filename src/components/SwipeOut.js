@@ -1,28 +1,3 @@
-/*
-<template>
-	<div
-		class="swipeout"
-		:class="{'swipeout--transitioning' : isTransitioning, 'swipeout--disabled': disabled}"
-	>
-		<div v-if="hasLeft" ref="left" class="swipeout-left">
-			<slot name="left" :close="closeActions"></slot>
-		</div>
-		<div v-if="hasRight" ref="right" class="swipeout-right">
-			<slot name="right" :close="closeActions"></slot>
-		</div>
-		<div
-			ref="content"
-			v-touch-pan.horizontal.mouse.mouseAllDir="_onPan"
-			class="swipeout-content"
-		>
-			<div @click="t">
-				<slot :revealRight="revealRight" :revealLeft="revealLeft" :close="closeActions" />
-			</div>
-		</div>
-	</div>
-</template>
-<script>
-	*/
 import Vue from 'vue';
 import touchPan from '../directives/touch-horizontal-pan';
 
@@ -130,11 +105,7 @@ export default Vue.extend({
 			this.$emit('active', false);
 			const newX = this._startLeft + offset.x;
 
-			const shouldClose = (this._startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this._startLeft > 0 && distance.x < this._leftActionsWidth) || (this._startLeft < 0 && distance.x < this._rightActionsWidth)));
-
-			// const shouldClose = this._startLeft === 0 ? Math.abs(newX) <= this.threshold : distance.x >= this.threshold;
-
-			if (shouldClose)
+			if ((this._startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this._startLeft > 0 && distance.x < this._leftActionsWidth) || (this._startLeft < 0 && distance.x < this._rightActionsWidth))))
 				return this._animateSlide(0, true);
 
 			return this._animateSlide(newX > 0 ? this._leftActionsWidth : -this._rightActionsWidth, true);
@@ -195,7 +166,7 @@ export default Vue.extend({
 	},
 	render(h) {
 		const content = [];
-		const { left, right } = this.$scopedSlots;
+		const { left, right, default: defaultScope } = this.$scopedSlots;
 
 		if (left)
 			content.push(
@@ -223,7 +194,7 @@ export default Vue.extend({
 			h('div', {
 				ref: 'content',
 				staticClass: 'swipeout-content',
-				directives: left || right ? [{
+				directives: !this.disabled && (left || right) ? [{
 					name: 'touch-pan',
 					value: this._onPan,
 					modifiers: {
@@ -232,11 +203,11 @@ export default Vue.extend({
 						mouseAllDir: true,
 					},
 				}] : null,
-			}, this.$scopedSlots.default({
+			}, defaultScope ? defaultScope({
 				revealLeft: this.revealLeft,
 				revealRight: this.revealRight,
 				close: this.closeActions,
-			})),
+			}) : null),
 		);
 
 		return h('div', {
