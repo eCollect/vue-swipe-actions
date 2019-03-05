@@ -11,21 +11,20 @@
 			:threshold="threshold"
 			class="swipeout-list-item"
 			@active="$emit('active', $event)"
-			@swipeout:click="_emitClick($event, item, index)"
-			@swipeout:dobuleclick="_emitDblClick($event, item)"
-			@swipeout:contentclick="_contentClick($event, item)"
 		>
 			<template slot="left" slot-scope="{ close }">
 				<slot name="left" :item="item" :close="close"></slot>
 			</template>
-			<template slot-scope="{ close, revealRight, revealLeft }">
-				<slot
-					:item="item"
-					:index="index"
-					:close="close"
-					:revealRight="revealRight"
-					:revealLeft="revealLeft"
-				></slot>
+			<template v-slot="{ close, revealRight, revealLeft }">
+				<div @click="_emitClick($event, item, index)">
+					<slot
+						:item="item"
+						:index="index"
+						:close="close"
+						:revealRight="revealRight"
+						:revealLeft="revealLeft"
+					/>
+				</div>
 			</template>
 			<template slot="right" slot-scope="{ close }">
 				<slot name="right" :item="item" :close="close"></slot>
@@ -40,7 +39,7 @@
 </template>
 <script>
     /* eslint-disable */
-	import SwipeOut from './SwipeOut.vue';
+	import SwipeOut from './SwipeOut';
 
 	export default {
 		name: 'vue-swipe-list',
@@ -86,7 +85,7 @@
 				return this.$refs.items[index].closeActions();
 			},
 			_emitClick(event, item) {
-				this.$emit('swipeout:click', { event, item });
+				console.log('hi');
 			},
 			_emitDblClick(event, item) {
 				this.$emit('swipeout:doubleclick', { event, item });

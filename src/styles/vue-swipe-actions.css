@@ -1,0 +1,55 @@
+/* SwipeOut */
+.swipeout {
+	position: relative;
+	overflow: hidden;
+	display: flex;
+}
+
+.swipeout .swipeout-left, .swipeout .swipeout-right {
+	position: absolute;
+	height: 100%;
+	display: flex;
+	z-index: 1;
+}
+
+.swipeout .swipeout-left {
+	left: 0;
+	transform: translateX(-100%);
+}
+
+.swipeout .swipeout-right {
+	right: 0;
+	transform: translateX(100%);
+}
+
+.swipeout .swipeout-content,
+.swipeout .swipeout-action {
+	transition: transform .2s;
+	will-change: transform;
+}
+
+.swipeout.swipeout--no-transition .swipeout-content,
+.swipeout.swipeout--no-transition .swipeout-action {
+  transition: none !important;
+}
+
+.swipeout .swipeout-content {
+	width: 100%;
+}
+
+.non-selectable {
+	user-select: none !important;
+  }
+
+.no-pointer-events {
+	pointer-events: none !important;
+}
+
+/* SwipeList */
+
+.swipeout-list {
+	display: flex;
+	flex-direction: column;
+}
+
+

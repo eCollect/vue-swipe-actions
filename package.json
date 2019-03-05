@@ -1,7 +1,7 @@
 {
   "name": "vue-swipe-actions",
   "description": "iOS style swipe actions",
-  "version": "1.0.21",
+  "version": "2.0.0-beta.1",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -17,7 +17,7 @@
     ]
   },
   "author": {
-    "name": "eCollect Sofia Tech Team"
+    "name": "eCollect AG"
   },
   "keywords": [
     "vuejs",

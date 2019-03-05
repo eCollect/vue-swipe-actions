@@ -1,5 +1,26 @@
 <template>
 	<div id="app">
+		<div class="swipeout-list">
+			<swipe-out v-for="(item, index) in mockSwipeList" :key="item.id">
+				<template slot="left" slot-scope="{ item, close }">
+					<div class="swipeout-action red" title="remove" @click="remove(item)">
+						<!-- place icon here or what ever you want -->
+						<i class="fa fa-trash"></i>
+					</div>
+					<div class="swipeout-action purple" @click="close">
+						<!-- place icon here or what ever you want -->
+						<i class="fa fa-close"></i>
+					</div>
+				</template>
+
+				<div class="card-content" @click="cc">
+					<!-- style content how ever you like -->
+					<h2>{{ item.title }}</h2>
+					<p>{{ item.description }}</p>
+					<span>{{ index }}</span>
+				</div>
+			</swipe-out>
+		</div>
 		<swipe-list
 			ref="list"
 			class="card"
@@ -146,7 +167,10 @@ export default {
     },
     sbClick(e) {
       console.log(e, "Second Button Click");
-    },
+	},
+	cc(e) {
+		console.log(Math.random(100));
+	},
     // keyboard
     onKeyDown(e) {
       if (e.keyCode !== 16) return;
@@ -162,10 +186,8 @@ export default {
 <style lang="scss">
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
-.swipeout-list {
-  display: flex;
-  flex-direction: column;
-}
+// app specific styles
+
 .swipeout-action {
   display: flex;
   align-items: center;
@@ -202,6 +224,7 @@ export default {
     }
   }
 }
+
 .swipeout-list-item {
   flex: 1;
   border-bottom: 1px solid lightgray;
