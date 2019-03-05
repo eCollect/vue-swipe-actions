@@ -5,7 +5,7 @@
 	>
 		<swipe-out
 			v-for="(item, index) in items"
-			:key="item[itemKey] || index"
+			:key="item[itemKey || transitionKey] || index"
 			:ref="`items`"
 			:disabled="disabled"
 			:threshold="threshold"
@@ -50,7 +50,12 @@
 			},
 			itemKey: {
 				type: String,
-				default: 'id',
+			},
+			/**
+			 * @deprecated since version 2.0 - use itemKey instead
+			 */
+			transitionKey: {
+				type: String,
 			},
 			threshold: {
 				type: Number,
