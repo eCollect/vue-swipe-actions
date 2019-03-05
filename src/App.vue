@@ -1,37 +1,14 @@
 <template>
 	<div id="app">
-		<div class="swipeout-list">
-			<swipe-out v-for="(item, index) in mockSwipeList" :key="item.id">
-				<template slot="left" slot-scope="{ item, close }">
-					<div class="swipeout-action red" title="remove" @click="remove(item)">
-						<!-- place icon here or what ever you want -->
-						<i class="fa fa-trash"></i>
-					</div>
-					<div class="swipeout-action purple" @click="close">
-						<!-- place icon here or what ever you want -->
-						<i class="fa fa-close"></i>
-					</div>
-				</template>
-
-				<div class="card-content" @click="cc">
-					<!-- style content how ever you like -->
-					<h2>{{ item.title }}</h2>
-					<p>{{ item.description }}</p>
-					<span>{{ index }}</span>
-				</div>
-			</swipe-out>
-		</div>
 		<swipe-list
 			ref="list"
 			class="card"
 			:disabled="!enabled"
 			:items="mockSwipeList"
-			transition-key="id"
-			@swipeout:contentclick="contentClick"
+			item-key="id"
 			@swipeout:click="itemClick"
-			@swipeout:doubleclick="itemDblClick"
 		>
-			<template slot-scope="{ item, index, revealLeft, revealRight, close }">
+			<template v-slot="{ item, index, revealLeft, revealRight, close }">
 				<!-- item is the corresponding object from the array -->
 				<!-- index is clearly the index -->
 				<!-- revealLeft is method which toggles the left side -->
@@ -44,9 +21,9 @@
 					<span>{{ index }}</span>
 				</div>
 			</template>
-			<!-- left swipe side template and slot-scope="{ item }" is the item clearly -->
-			<!-- remove <template slot="left" slot-scope="{ item }"> if you dont wanna have left swipe side  -->
-			<template slot="left" slot-scope="{ item, close }">
+			<!-- left swipe side template and v-slot:left="{ item }" is the item clearly -->
+			<!-- remove if you dont wanna have left swipe side  -->
+			<template v-slot:left="{ item, close }">
 				<div class="swipeout-action red" title="remove" @click="remove(item)">
 					<!-- place icon here or what ever you want -->
 					<i class="fa fa-trash"></i>
@@ -56,9 +33,9 @@
 					<i class="fa fa-close"></i>
 				</div>
 			</template>
-			<!-- right swipe side template and slot-scope="{ item }" is the item clearly -->
-			<!-- remove <template slot="right" slot-scope="{ item }"> if you dont wanna have right swipe side  -->
-			<template slot="right" slot-scope="{ item }">
+			<!-- right swipe side template and v-slot:right"{ item }" is the item clearly -->
+			<!-- remove if you dont wanna have right swipe side  -->
+			<template v-slot:right="{ item }">
 				<div class="swipeout-action blue">
 					<!-- place icon here or what ever you want -->
 					<i class="fa fa-heart"></i>
@@ -68,10 +45,12 @@
 					<i class="fa fa-heart"></i>
 				</div>
 			</template>
-			<div slot="empty">
-				<!-- change mockSwipeList to an empty array to see this slot in action  -->
-				list is empty ( filtered or just empty )
-			</div>
+			<template v-slot:empty>
+				<div>
+					<!-- change mockSwipeList to an empty array to see this slot in action  -->
+					list is empty ( filtered or just empty )
+				</div>
+			</template>
 		</swipe-list>
 		<p>
 			<button @click="revealFirstLeft">
@@ -153,23 +132,14 @@ export default {
       this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
       // console.log(e, 'remove');
     },
-    contentClick(e) {
-      console.log(e, "content click");
-    },
     itemClick(e) {
       console.log(e, "item click");
-    },
-    itemDblClick(e) {
-      console.log(e, "item double click");
     },
     fbClick(e) {
       console.log(e, "First Button Click");
     },
     sbClick(e) {
       console.log(e, "Second Button Click");
-	},
-	cc(e) {
-		console.log(Math.random(100));
 	},
     // keyboard
     onKeyDown(e) {

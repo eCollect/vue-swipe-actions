@@ -36,16 +36,15 @@ SwipeList component is just a helper for listing multiple SwipeOuts.
 | Prop             | Data Type | Required|Default| Description        |
 | ---------------- | --------- |-------- |-------|------------------ |
 | `items`          | Array     | *       |       | An array with your data |
-| `transition-key` | String    |         |id     | Your key for :key when list is v-for-ed, if not found array index will used|
+| `item-key` | String    |         |id     | Your key for :key when list is v-for-ed, if not found array index will used|
 | `disabled`       | Boolean   |         |false  | if true items will be disabled, and text selection will be possible (on desktop). adds class ``swipeout--disabled``  |
 | `threshold`      | Number    |         |45     | With that property you can fine tune when actions are considered open |
 
 #### Events
 
-| Event                    | Payload         | Description        |
+| Event                    | Payload        | Description        |
 | ----------------------- | --------------- | -|
-| `swipeout:click`        | { event, item } | Emitted on single click/tap on the item |
-| `swipeout:doubleclick`  | { event, item } | Emitted on double click/tap on the item |
+| `swipeout:click`        | item 			| Emitted on single click/tap on the item |
 | `active`                | Boolean         | Emitted when the user is opening/closing the any of the actions |
 
 #### Methods
@@ -70,10 +69,8 @@ SwipeOut is the main component, representing a single item with it's actions.
 
 #### Events
 
-| Prop                    | Payload         | Description        |
+| Event                    | Payload         | Description        |
 | ----------------------- | --------------- | -|
-| `swipeout:click`        | event | Emitted on single click/tap on the item |
-| `swipeout:doubleclick`  | event | Emitted on double click/tap on the item |
 | `active`                | Boolean         | Emitted when the user is opening/closing the any of the actions |
 
 ```html
