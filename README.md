@@ -192,45 +192,62 @@ The default styling is as minimal as possible, defining no visual styles but onl
 You can overwrite any of the styles if needed.
 
 ```css
+/* SwipeOut */
 .swipeout {
-  position: relative;
-  overflow: hidden;
-  user-select: none;
-  display: flex;
+	position: relative;
+	overflow: hidden;
+	display: flex;
 }
-.swipeout.swipeout--disabled {
-  user-select: auto;
+
+.swipeout .swipeout-left, .swipeout .swipeout-right {
+	position: absolute;
+	height: 100%;
+	display: flex;
+	z-index: 1;
 }
-.swipeout .swipeout-left,
-.swipeout .swipeout-right {
-  position: absolute;
-  height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  z-index: 1;
-}
-.swipeout.swipeout--transitioning .swipeout-action,
-.swipeout.swipeout--transitioning .swipeout-content {
-  transition: transform 0.3s;
-}
-.swipeout .swipeout-content {
-  width: 100%;
-}
-.swipeout .swipeout-action,
-.swipeout .swipeout-content {
-  will-change: transform;
-}
+
 .swipeout .swipeout-left {
-  left: 0;
-  transform: translateX(-100%);
+	left: 0;
+	transform: translateX(-100%);
 }
+
 .swipeout .swipeout-right {
-  right: 0;
-  transform: translateX(100%);
+	right: 0;
+	transform: translateX(100%);
 }
+
+.swipeout .swipeout-content,
+.swipeout .swipeout-action {
+	transition: transform .2s;
+	will-change: transform;
+}
+
+.swipeout.swipeout--no-transition .swipeout-content,
+.swipeout.swipeout--no-transition .swipeout-action {
+  transition: none !important;
+}
+
+.swipeout .swipeout-content {
+	width: 100%;
+}
+
+.non-selectable {
+	user-select: none !important;
+}
+
+.no-pointer-events {
+	pointer-events: none !important;
+}
+
+/* SwipeList */
+
+.swipeout-list {
+	display: flex;
+	flex-direction: column;
+}
+
 .swipeout-list-item {
-  outline: none;
+	flex: 1;
 }
 ```
 
