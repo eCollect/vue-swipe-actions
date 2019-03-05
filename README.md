@@ -231,11 +231,11 @@ You can overwrite any of the styles if needed.
 	width: 100%;
 }
 
-.non-selectable {
+.swipeout-non-selectable {
 	user-select: none !important;
 }
 
-.no-pointer-events {
+.swipeout-no-pointer-events {
 	pointer-events: none !important;
 }
 

@@ -171,8 +171,8 @@ export default {
 
 				if (ctx.event.abort !== true) {
 					document.documentElement.style.cursor = 'grabbing';
-					document.body.classList.add('no-pointer-events');
-					document.body.classList.add('non-selectable');
+					document.body.classList.add('swipeout-no-pointer-events');
+					document.body.classList.add('swipeout-non-selectable');
 					// clearSelection();
 				}
 
@@ -183,8 +183,8 @@ export default {
 				if (ctx.event.mouse !== true) removeObserver(ctx);
 
 				document.documentElement.style.cursor = '';
-				document.body.classList.remove('no-pointer-events');
-				document.body.classList.remove('non-selectable');
+				document.body.classList.remove('swipeout-no-pointer-events');
+				document.body.classList.remove('swipeout-non-selectable');
 
 				if (ctx.event.abort === true || ctx.event.detected !== true || ctx.event.isFirst === true)
 					return;
@@ -230,8 +230,8 @@ export default {
 			removeObserver(ctx);
 
 			document.documentElement.style.cursor = '';
-			document.body.classList.remove('no-pointer-events');
-			document.body.classList.remove('non-selectable');
+			document.body.classList.remove('swipeout-no-pointer-events');
+			document.body.classList.remove('swipeout-non-selectable');
 
 			const
 				mouse = binding.modifiers.mouse === true;
