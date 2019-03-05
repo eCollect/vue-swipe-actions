@@ -153,10 +153,10 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
-// app specific styles
+/* app specific styles */
 
 .swipeout-action {
   display: flex;
@@ -164,44 +164,48 @@ export default {
   padding: 0 3rem;
   cursor: pointer;
   left: 0;
-  // https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/
-  &.blue {
+}
+/* https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/ */
+.swipeout-action.blue {
     color: white;
     background-color: rgb(0, 122, 255);
-    &:hover {
-      background-color: darken(rgb(0, 122, 255), 5%);
-    }
-  }
-  &.purple {
+}
+.swipeout-action.blue:hover {
+    background-color: darken(rgb(0, 122, 255), 5%);
+}
+.swipeout-action.purple {
     color: white;
     background-color: rgb(88, 86, 214);
-    &:hover {
-      background-color: darken(rgb(88, 86, 214), 5%);
-    }
-  }
-  &.red {
+}
+.swipeout-action.purple:hover {
+    background-color: darken(rgb(88, 86, 214), 5%);
+}
+
+.swipeout-action.red {
     color: white;
     background-color: rgb(255, 59, 48);
-    &:hover {
-      background-color: darken(rgb(255, 59, 48), 5%);
-    }
-  }
-  &.green {
+}
+.swipeout-action.red:hover {
+    background-color: darken(rgb(255, 59, 48), 5%);
+}
+.swipeout-action.green {
     color: white;
     background-color: rgb(76, 217, 100);
-    &:hover {
-      background-color: darken(rgb(76, 217, 100), 5%);
-    }
-  }
 }
+.swipeout-action.green:hover {
+	background-color: darken(rgb(76, 217, 100), 5%);
+}
+
 
 .swipeout-list-item {
   flex: 1;
   border-bottom: 1px solid lightgray;
-  &:last-of-type {
-    border-bottom: none;
-  }
 }
+
+.swipeout-list-item:last-of-type {
+    border-bottom: none;
+}
+
 .card {
   width: 100%;
   background-color: white;
