@@ -200,7 +200,8 @@ export default Vue.extend({
 					modifiers: {
 						horizontal: true,
 						mouse: true,
-						mouseAllDir: true,
+						prevent: true,
+						mousePrevent: true,
 					},
 				}] : null,
 			}, defaultScope ? defaultScope({
