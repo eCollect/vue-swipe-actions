@@ -14,7 +14,7 @@
 				<!-- revealLeft is method which toggles the left side -->
 				<!-- revealRight is method which toggles the right side -->
 				<!-- close is method which closes an opened side -->
-				<div class="card-content">
+				<div ref="content" class="card-content">
 					<!-- style content how ever you like -->
 					<h2>{{ item.title }}</h2>
 					<p>{{ item.description }}</p>
@@ -23,8 +23,8 @@
 			</template>
 			<!-- left swipe side template and v-slot:left="{ item }" is the item clearly -->
 			<!-- remove if you dont wanna have left swipe side  -->
-			<template v-slot:left="{ item, close }">
-				<div class="swipeout-action red" title="remove" @click="remove(item)">
+			<template v-slot:left="{ item, close, index }">
+				<div class="swipeout-action red" title="remove" @click="animationRemove(item, index, close)">
 					<!-- place icon here or what ever you want -->
 					<i class="fa fa-trash"></i>
 				</div>
@@ -131,7 +131,14 @@ export default {
     remove(item) {
       this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
       // console.log(e, 'remove');
+	},
+    animationRemove(item, index, close) {
+		this.$refs.list.$refs.items[index].$refs.content.classList.add('transition-right');
+		setTimeout(() => {
+      		this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
+		}, 200)
     },
+
     itemClick(e) {
       console.log(e, "item click");
     },
@@ -215,5 +222,11 @@ export default {
 }
 .card-content {
   padding: 1rem;
+}
+.transition-right {
+	transform: translate3d(100%, 0 ,0) !important;
+}
+.transition-left {
+	transform: translate3d(-100%, 0 ,0) !important;
 }
 </style>

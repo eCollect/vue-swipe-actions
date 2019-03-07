@@ -13,10 +13,15 @@
 			@active="$emit('active', $event)"
 		>
 			<template v-if="$scopedSlots.left" v-slot:left="{ close }">
-				<slot name="left" :item="item" :close="close" />
+				<slot
+					name="left"
+					:item="item"
+					:close="close"
+					:index="index"
+				/>
 			</template>
 			<template v-slot="{ close, revealRight, revealLeft }">
-				<div @click="$emit('swipeout:click', item)">
+				<div ref="itemsContent" @click="$emit('swipeout:click', item)">
 					<slot
 						:item="item"
 						:index="index"
@@ -27,7 +32,12 @@
 				</div>
 			</template>
 			<template v-if="$scopedSlots.right" v-slot:right="{ close }">
-				<slot name="right" :item="item" :close="close" />
+				<slot
+					name="right"
+					:item="item"
+					:close="close"
+					:index="index"
+				/>
 			</template>
 		</swipe-out>
 		<template v-if="!items.length">
