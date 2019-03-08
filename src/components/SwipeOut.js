@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import touchPan from '../directives/touch-horizontal-pan';
 
 // eslint-disable-next-line no-unused-vars
@@ -11,8 +10,8 @@ function translateX(x) {
 	return `translate3d(${x}px, 0, 0)`;
 }
 
-export default Vue.extend({
-	name: 'SwipeItem',
+export default {
+	name: 'SwipeOut',
 	directives: {
 		touchPan,
 	},
