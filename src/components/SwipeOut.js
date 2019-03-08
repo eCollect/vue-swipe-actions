@@ -215,4 +215,4 @@ export default {
 			class: { 'swipeout--disabled': this.disabled },
 		}, content);
 	},
-});
+};
