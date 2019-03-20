@@ -85,6 +85,7 @@ export default {
 				this._startLeft = this._distanceSwiped();
 				this._isActive = true;
 				this.$emit('active', true);
+				clearTimeout(this._timer);
 			}
 		},
 		_swipeListener({ offset }) {
@@ -107,7 +108,16 @@ export default {
 			if ((this._startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this._startLeft > 0 && distance.x < this._leftActionsWidth) || (this._startLeft < 0 && distance.x < this._rightActionsWidth))))
 				return this._animateSlide(0, true);
 
-			return this._animateSlide(newX > 0 ? this._leftActionsWidth : -this._rightActionsWidth, true);
+			this._animateSlide(newX > 0 ? this._leftActionsWidth : -this._rightActionsWidth, true);
+
+			this._timer = setTimeout(() => {
+				this.emit('reveal', {
+					side: newX > 0 ? 'left' : 'right',
+					close: this.closeActions,
+				});
+			}, 200);
+
+			return null;
 		},
 
 		// shift actions
@@ -156,7 +166,8 @@ export default {
 			}
 		},
 		_animateSlide(to) {
-			requestAnimationFrame(() => {
+			cancelAnimationFrame(this._frame);
+			this._frame = requestAnimationFrame(() => {
 				this.$refs.content.style.transform = translateX(to);
 				this._shiftLeftActions(to);
 				this._shiftRightActions(to);
@@ -214,5 +225,9 @@ export default {
 			staticClass: 'swipeout',
 			class: { 'swipeout--disabled': this.disabled },
 		}, content);
+	},
+	beforeDestroy() {
+		clearTimeout(this._timer);
+		cancelAnimationFrame(this._frame);
 	},
 };
