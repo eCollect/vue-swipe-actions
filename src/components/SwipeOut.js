@@ -44,7 +44,7 @@ export default {
 	},
 	data() {
 		return {
-			innerRevealed: this.revealed || null,
+			innerRevealed: this.revealed || false,
 		};
 	},
 	methods: {
@@ -123,7 +123,7 @@ export default {
 			const newX = this._startLeft + offset.x;
 
 			if ((this._startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this._startLeft > 0 && distance.x < this._leftActionsWidth) || (this._startLeft < 0 && distance.x < this._rightActionsWidth)))) // {
-				return this._reveal(null);
+				return this._reveal(false);
 			return this._reveal(newX > 0 ? 'left' : 'right');
 		},
 		_reveal(dir, recalculateWidth) {
@@ -136,7 +136,7 @@ export default {
 			// close
 			if (!dir) {
 				this._animateSlide(0);
-				this.$emit('close');
+				this.$emit('closed');
 				return;
 			}
 
@@ -144,16 +144,16 @@ export default {
 			if (dir === 'left') {
 				this._leftActionsWidth = recalculateWidth ? clientWidth(this.$refs.left) : this._leftActionsWidth;
 				this._animateSlide(this._leftActionsWidth);
-				this.$emit('reveal', { side: 'left', close: this.closeActions });
-				this.$emit('revealLeft', { close: this.closeActions });
+				this.$emit('revealed', { side: 'left', close: this.closeActions });
+				this.$emit('leftRevealed', { close: this.closeActions });
 				return;
 			}
 
 			// right
 			this._rightActionsWidth = recalculateWidth ? clientWidth(this.$refs.right) : this._rightActionsWidth;
 			this._animateSlide(-this._rightActionsWidth);
-			this.$emit('reveal', { side: 'right', close: this.closeActions });
-			this.$emit('revealRight', { close: this.closeActions });
+			this.$emit('revealed', { side: 'right', close: this.closeActions });
+			this.$emit('rightRevealed', { close: this.closeActions });
 		},
 		// shift actions
 		_shiftLeftActions(newX) {

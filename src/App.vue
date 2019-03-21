@@ -18,8 +18,8 @@
 				<div ref="content" class="card-content">
 					<!-- style content how ever you like -->
 					<h2>{{ item.title }}</h2>
-					<p>{{ item.description }} {{ item.id }}</p>
-					<span>{{ index }}</span>
+					<p><b>id:</b> {{ item.id }} <b>description:</b> {{ item.description }}</p>
+					<b>index:</b><span> {{ index }}</span>
 				</div>
 			</template>
 			<!-- left swipe side template and v-slot:left="{ item }" is the item clearly -->
@@ -71,9 +71,6 @@
 			</button>
 			<button @click="page = Math.min(page + 1, 1)">
 				next
-			</button>
-			<button @click="testOne">
-				test1
 			</button>
 		</p>
 		<p>
@@ -168,12 +165,6 @@
 				setTimeout(() => {
 					this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
 				}, 200);
-			},
-
-			testOne() {
-				this.mockSwipeList[0][0].title = 'Changed';
-				this.$set(this.revealed, 'a', 'right');
-				// this.revealed.a = 'right';
 			},
 
 			itemClick(e) {

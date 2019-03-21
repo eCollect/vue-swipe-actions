@@ -9,10 +9,12 @@
 			:ref="`items`"
 			:disabled="disabled"
 			:threshold="threshold"
+			:revealed="innerRevealed[index]"
 			class="swipeout-list-item"
-			:revealed="innerRevealed[_getItemKey(item, index)]"
-			@reveal="_onReveal(item, index, $event.side)"
-			@close="_onClose(item, index)"
+			@revealed="_onReveal(item, index, $event)"
+			@left-revealed="$emit('leftRevealed', { index, item, close: $event.close })"
+			@right-reveales="$emit('rightRevealed', { index, item, close: $event.close })"
+			@closed="_onClose(item, index, $event)"
 			@active="$emit('active', $event)"
 		>
 			<template v-if="$scopedSlots.left" v-slot:left="{ close }">
@@ -107,35 +109,54 @@
 					return;
 				this.$refs.items[index].revealLeft();
 			},
-			closeActions(index) {
+			close(index) {
 				if (!this.$refs.items)
 					return;
 
 				if (index === undefined)
-					return this.$refs.items.forEach(i => i.closeActions());
+					return this.$refs.items.forEach(i => i.close());
 
 				 if (!this.$refs.items[index])
 					 return;
 
-				return this.$refs.items[index].closeActions();
+				return this.$refs.items[index].close();
 			},
+			isRevealed(index) {
+				return this.innerRevealed[index] || false;
+			},
+			/**
+			 * @deprecated use ```close``` instead
+			 */
+			closeActions(index) {
+				this.close(index);
+			},
+			// private
+			/*
 			_updateRevealed(item, index, side) {
 				const key = this._getItemKey(item, index);
 				if (side)
 					return this.$set(this.innerRevealed, key, side);
 				return this.$delete(this.innerRevealed, key);
 			},
-			_onReveal(item, index, side) {
-				const key = this._getItemKey(item, index);
+			*/
+			_onReveal(item, index, event) {
+				this.$emit('revealed', {
+					index,
+					item,
+					side: event.side,
+					close: event.close,
+				});
 				this._emitRevealed({
 					...this.innerRevealed,
-					[key]: side,
+					[index]: event.side,
 				});
-				// this.$set(this.innerRevealed, key, side);
 			},
-			_onClose(item, index) {
-				const key = this._getItemKey(item, index);
-				const { [key]: omit, ...newRevealed } = this.innerRevealed;
+			_onClose(item, index, event) {
+				this.$emit('closed', {
+					index,
+					item,
+				});
+				const { [index]: omit, ...newRevealed } = this.innerRevealed;
 				this._emitRevealed(newRevealed);
 			},
 			_getItemKey(item, index) {
