@@ -39,7 +39,7 @@ SwipeList component is just a helper for listing multiple SwipeOuts.
 | `item-key` | String    |         |id     | Your key for :key when list is v-for-ed, if not found array index will used|
 | `disabled`       | Boolean   |         |false  | if true items will be disabled, and text selection will be possible (on desktop). adds class ``swipeout--disabled``  |
 | `threshold`      | Number    |         |45     | With that property you can fine tune when actions are considered open |
-| `revealed`       | Object | || An object representing the revealed status of the items, key is the index and the value is either ```left``` or ```right``` |
+| `revealed`       | Object | || An object representing the revealed status of the items, key is the index and the value is either ```left``` or ```right```, use it with the ```.sync``` modifier |
 
 #### Events
 
@@ -55,6 +55,7 @@ SwipeList component is just a helper for listing multiple SwipeOuts.
 | `revealRight`           | index (number)  | Reveals right actions on given index |
 | `revealLeft`            | index (number)  | Reveals left actions on given index |
 | `closeActions`          | index (number)? | Closes actions on given index, or all if no index given |
+| `isRevealed`            | index (number)  | Returns the revealed status on a given index, either ```false``` for closed, or ```left``` or ```right``` |
 
 
 ### SwipeOut
