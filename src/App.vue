@@ -7,7 +7,6 @@
 			:items="mockSwipeList[page]"
 			item-key="id"
 			:revealed.sync="revealed"
-			@swipeout:click="itemClick"
 			@closed="setLastEvent('closed', $event)"
 			@leftRevealed="setLastEvent('leftRevealed', $event)"
 			@rightRevealed="setLastEvent('rightRevealed', $event)"
@@ -18,7 +17,7 @@
 				<!-- revealLeft is method which toggles the left side -->
 				<!-- revealRight is method which toggles the right side -->
 				<!-- close is method which closes an opened side -->
-				<div ref="content" class="card-content">
+				<div ref="content" class="card-content" @click.native="itemClick(item)">
 					<!-- style content how ever you like -->
 					<h2>{{ item.title }}</h2>
 					<p><b>id:</b> {{ item.id }} <b>description:</b> {{ item.description }}</p>
