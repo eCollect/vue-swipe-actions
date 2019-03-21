@@ -12,8 +12,8 @@
 			:revealed="innerRevealed[index]"
 			class="swipeout-list-item"
 			@revealed="_onReveal(item, index, $event)"
-			@left-revealed="$emit('leftRevealed', { index, item, close: $event.close })"
-			@right-reveales="$emit('rightRevealed', { index, item, close: $event.close })"
+			@leftRevealed="$emit('leftRevealed', { index, item, close: $event.close })"
+			@rightRevealed="$emit('rightRevealed', { index, item, close: $event.close })"
 			@closed="_onClose(item, index, $event)"
 			@active="$emit('active', $event)"
 		>

@@ -8,6 +8,9 @@
 			item-key="id"
 			:revealed.sync="revealed"
 			@swipeout:click="itemClick"
+			@closed="setLastEvent('closed', $event)"
+			@leftRevealed="setLastEvent('leftRevealed', $event)"
+			@rightRevealed="setLastEvent('rightRevealed', $event)"
 		>
 			<template v-slot="{ item, index, revealLeft, revealRight, close }">
 				<!-- item is the corresponding object from the array -->
@@ -25,7 +28,7 @@
 			<!-- left swipe side template and v-slot:left="{ item }" is the item clearly -->
 			<!-- remove if you dont wanna have left swipe side  -->
 			<template v-slot:left="{ item, close, index }">
-				<div class="swipeout-action red" title="remove" @click="animationRemove(item, index, close)">
+				<div class="swipeout-action red" title="remove" @click="remove(item)">
 					<!-- place icon here or what ever you want -->
 					<i class="fa fa-trash"></i>
 				</div>
@@ -53,26 +56,38 @@
 				</div>
 			</template>
 		</swipe-list>
-		<p>
-			<button @click="revealFirstLeft">
-				reveal 1st left
-			</button>
-			<button @click="revealFirstRight">
-				reveal 1st right
-			</button>
-			<button @click="closeFirst">
-				close 1st
-			</button>
-			<button @click="closeAll">
-				close all
-			</button>
-			<button @click="page = Math.max(page - 1, 0)">
-				prev
-			</button>
-			<button @click="page = Math.min(page + 1, 1)">
-				next
-			</button>
-		</p>
+		<div class="toolbar">
+			<div class="toolbar-section">
+				<p>
+					<button @click="revealFirstLeft">
+						reveal 1st left
+					</button>
+					<button @click="revealFirstRight">
+						reveal 1st right
+					</button>
+					<button @click="closeFirst">
+						close 1st
+					</button>
+					<button @click="closeAll">
+						close all
+					</button>
+					<button @click="page = Math.max(page - 1, 0)">
+						prev
+					</button>
+					<button @click="page = Math.min(page + 1, 1)">
+						next
+					</button>
+				</p>
+			</div>
+			<div class="toolbar-section--center" />
+			<div class="toolbar-section">
+				<small>revealed: {{ Object.entries(revealed).map(([index, side]) => `${index}: ${side}`).join(', ') }}</small>
+			</div>
+			<div class="toolbar-section--center" />
+			<div class="toolbar-section">
+				<small>last event: <template v-if="lastEventDescription">[<b>{{ lastEventDescription.name }}</b>] index: {{ lastEventDescription.index }} id: {{ lastEventDescription.id }}</template><span v-else>none</span></small>
+			</div>
+		</div>
 		<p>
 			<small>
 				<i>Press and hold [shift] to select text</i>
@@ -95,6 +110,7 @@
 				enabled: true,
 				page: 0,
 				revealed: {},
+				lastEventDescription: '',
 				mockSwipeList: [
 					[
 						{
@@ -156,15 +172,15 @@
 				this.$refs.list.closeActions();
 			},
 			remove(item) {
-				this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
-				// console.log(e, 'remove');
+				this.$set(this.mockSwipeList, this.page, this.mockSwipeList[this.page].filter(i => i !== item));
 			},
 
-			animationRemove(item, index) {
-				this.$refs.list.$refs.items[index].$refs.content.classList.add('transition-right');
-				setTimeout(() => {
-					this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
-				}, 200);
+			setLastEvent(name, { item, index }) {
+				this.lastEventDescription = {
+					name,
+					index,
+					id: item.id,
+				};
 			},
 
 			itemClick(e) {
@@ -257,4 +273,18 @@
 .transition-left {
 	transform: translate3d(-100%, 0 ,0) !important;
 }
+
+.toolbar {
+	display: flex;
+	align-items: center;
+}
+
+.toolbar .toolbar-section {
+	flex: 0 0 auto;
+}
+
+.toolbar .toolbar-section--center {
+	flex: 1000 1 0%;
+}
+
 </style>
