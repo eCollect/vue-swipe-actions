@@ -155,16 +155,6 @@ export default {
 			this.$emit('reveal', { side: 'right', close: this.closeActions });
 			this.$emit('revealRight', { close: this.closeActions });
 		},
-
-		_updateRevelead(val) {
-			// console.log(val);
-			if (this.revealed !== undefined) {
-				this.$emit('update:revealed', val);
-				return;
-			}
-			this.innerRevealed = val;
-		},
-
 		// shift actions
 		_shiftLeftActions(newX) {
 			if (!this.$scopedSlots.left)

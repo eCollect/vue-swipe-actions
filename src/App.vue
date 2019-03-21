@@ -85,117 +85,117 @@
 </template>
 
 <script>
-/* eslint-disable */
-import { SwipeList, SwipeOut } from "./components/index";
+	import { SwipeList, SwipeOut } from './components/index';
 
-export default {
-  name: "app",
-  components: {
-    SwipeOut,
-    SwipeList
-  },
-  data() {
-    return {
-	  enabled: true,
-	  page: 0,
-	  revealed: {},
-      mockSwipeList: [
-		[
-			{
-			id: 'a',
-			title: "Some title",
-			description: "some description"
+	export default {
+		name: 'App',
+		components: {
+			SwipeOut,
+			SwipeList,
+		},
+		data() {
+			return {
+				enabled: true,
+				page: 0,
+				revealed: {},
+				mockSwipeList: [
+					[
+						{
+							id: 'a',
+							title: 'Some title',
+							description: 'some description',
+						},
+						{
+							id: 'b',
+							title: 'Some title',
+							description: 'some description',
+						},
+						{
+							id: 'c',
+							title: 'Some title',
+							description: 'some description',
+						},
+					],
+					[
+						{
+							id: 'd',
+							title: 'Some title',
+							description: 'some description',
+						},
+						{
+							id: 'e',
+							title: 'Some title',
+							description: 'some description',
+						},
+						{
+							id: 'f',
+							title: 'Some title',
+							description: 'some description',
+						},
+					],
+				],
+			};
+		},
+		mounted() {
+			// ideally should be in some global handler/store
+			window.addEventListener('keydown', this.onKeyDown);
+			window.addEventListener('keyup', this.onKeyUp);
+		},
+		beforeDestroy() {
+			window.removeEventListener('keydown', this.onKeyDown);
+			window.removeEventListener('keyup', this.onKeyUp);
+		},
+		methods: {
+			revealFirstRight() {
+				this.$refs.list.revealRight(0);
 			},
-			{
-			id: 'b',
-			title: "Some title",
-			description: "some description"
+			revealFirstLeft() {
+				this.$refs.list.revealLeft(0);
 			},
-			{
-			id: 'c',
-			title: "Some title",
-			description: "some description"
+			closeFirst() {
+				this.$refs.list.closeActions(0);
 			},
-		],
-		[
-			{
-			id: 'd',
-			title: "Some title",
-			description: "some description"
+			closeAll() {
+				this.$refs.list.closeActions();
 			},
-			{
-			id: 'e',
-			title: "Some title",
-			description: "some description"
+			remove(item) {
+				this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
+				// console.log(e, 'remove');
 			},
-			{
-			id: 'f',
-			title: "Some title",
-			description: "some description"
-			}
-		],
-      ]
-    };
-  },
-  mounted() {
-    // ideally should be in some global handler/store
-    window.addEventListener("keydown", this.onKeyDown);
-    window.addEventListener("keyup", this.onKeyUp);
-  },
-  beforeDestroy() {
-    window.removeEventListener("keydown", this.onKeyDown);
-    window.removeEventListener("keyup", this.onKeyUp);
-  },
-  methods: {
-    revealFirstRight() {
-      this.$refs.list.revealRight(0);
-    },
-    revealFirstLeft() {
-      this.$refs.list.revealLeft(0);
-    },
-    closeFirst() {
-      this.$refs.list.closeActions(0);
-    },
-    closeAll() {
-      this.$refs.list.closeActions();
-    },
-    remove(item) {
-      this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
-      // console.log(e, 'remove');
-	},
-    animationRemove(item, index, close) {
-		this.$refs.list.$refs.items[index].$refs.content.classList.add('transition-right');
-		setTimeout(() => {
-      		this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
-		}, 200)
-	},
 
-	testOne() {
-		this.mockSwipeList[0][0].title = 'Changed';
-		this.$set(this.revealed, 'a', 'right');
-		// this.revealed.a = 'right';
-	},
+			animationRemove(item, index) {
+				this.$refs.list.$refs.items[index].$refs.content.classList.add('transition-right');
+				setTimeout(() => {
+					this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
+				}, 200);
+			},
 
-    itemClick(e) {
-      console.log(e, "item click");
-    },
-    fbClick(e) {
-      console.log(e, "First Button Click");
-    },
-    sbClick(e) {
-      console.log(e, "Second Button Click");
-	},
-    // keyboard
-    onKeyDown(e) {
-      if (e.keyCode !== 16) return;
-      this.enabled = false;
-    },
-    onKeyUp(e) {
-      if (e.keyCode !== 16) return;
-      this.enabled = true;
-    }
-  }
-};
+			testOne() {
+				this.mockSwipeList[0][0].title = 'Changed';
+				this.$set(this.revealed, 'a', 'right');
+				// this.revealed.a = 'right';
+			},
+
+			itemClick(e) {
+				console.log(e, 'item click');
+			},
+			fbClick(e) {
+				console.log(e, 'First Button Click');
+			},
+			sbClick(e) {
+				console.log(e, 'Second Button Click');
+			},
+			// keyboard
+			onKeyDown(e) {
+				if (e.keyCode !== 16) return;
+				this.enabled = false;
+			},
+			onKeyUp(e) {
+				if (e.keyCode !== 16) return;
+				this.enabled = true;
+			},
+		},
+	};
 </script>
 <style>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
