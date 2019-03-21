@@ -10,6 +10,10 @@ function translateX(x) {
 	return `translate3d(${x}px, 0, 0)`;
 }
 
+function clientWidth(ref) {
+	return ref ? ref.clientWidth : 0;
+}
+
 export default {
 	name: 'SwipeOut',
 	directives: {
@@ -20,6 +24,9 @@ export default {
 			type: Number,
 			default: 45,
 		},
+		revealed: {
+			type: String,
+		},
 		/**
 		* Is the item disabled
 		*/
@@ -28,32 +35,43 @@ export default {
 			default: false,
 		},
 	},
+	watch: {
+		revealed(val) {
+			if (this.innerRevealed === val)
+				return;
+			this._reveal(val, true);
+		},
+	},
+	data() {
+		return {
+			innerRevealed: this.revealed || null,
+		};
+	},
 	methods: {
 		// public
+		/**
+		 * @deprecated use ```close``` instead...
+		 */
 		closeActions() {
+			this.close();
+		},
+		close() {
 			if (this._isActive)
 				return;
 
-			this._leftActionsWidth = this.$refs.left ? this.$refs.left.clientWidth : 0;
-			this._rightActionsWidth = this.$refs.right ? this.$refs.right.clientWidth : 0;
-
-			this._animateSlide(0, this._distanceSwiped());
+			this._reveal(false, true);
 		},
 		revealLeft() {
+			if (this._isActive || !this.$refs.left)
+				return;
+
+			this._reveal('left', true);
+		},
+		revealRight() {
 			if (this._isActive || !this.$refs.right)
 				return;
 
-			this.closeActions();
-
-			this._animateSlide(this._leftActionsWidth, true);
-		},
-		revealRight() {
-			if (this._isActive || this.rightOpen || !this.$refs.right)
-				return;
-
-			this.closeActions();
-
-			this._animateSlide(-this._rightActionsWidth, true);
+			this._reveal('right', true);
 		},
 		// private
 		_distanceSwiped() {
@@ -98,26 +116,53 @@ export default {
 
 			return this._animateSlide(offset.x + this._startLeft);
 		},
-
 		_stopListener({ offset, distance }) {
 			this.$el.classList.remove('swipeout--no-transition');
 			this._isActive = false;
 			this.$emit('active', false);
 			const newX = this._startLeft + offset.x;
 
-			if ((this._startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this._startLeft > 0 && distance.x < this._leftActionsWidth) || (this._startLeft < 0 && distance.x < this._rightActionsWidth))))
-				return this._animateSlide(0, true);
+			if ((this._startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this._startLeft > 0 && distance.x < this._leftActionsWidth) || (this._startLeft < 0 && distance.x < this._rightActionsWidth)))) // {
+				return this._reveal(null);
+			return this._reveal(newX > 0 ? 'left' : 'right');
+		},
+		_reveal(dir, recalculateWidth) {
+			if (this._isActive)
+				return;
 
-			this._animateSlide(newX > 0 ? this._leftActionsWidth : -this._rightActionsWidth, true);
+			this.innerRevealed = dir;
+			this.$emit('update:revealed', dir);
 
-			this._timer = setTimeout(() => {
-				this.emit('reveal', {
-					side: newX > 0 ? 'left' : 'right',
-					close: this.closeActions,
-				});
-			}, 200);
+			// close
+			if (!dir) {
+				this._animateSlide(0);
+				this.$emit('close');
+				return;
+			}
 
-			return null;
+			// left
+			if (dir === 'left') {
+				this._leftActionsWidth = recalculateWidth ? clientWidth(this.$refs.left) : this._leftActionsWidth;
+				this._animateSlide(this._leftActionsWidth);
+				this.$emit('reveal', { side: 'left', close: this.closeActions });
+				this.$emit('revealLeft', { close: this.closeActions });
+				return;
+			}
+
+			// right
+			this._rightActionsWidth = recalculateWidth ? clientWidth(this.$refs.right) : this._rightActionsWidth;
+			this._animateSlide(-this._rightActionsWidth);
+			this.$emit('reveal', { side: 'right', close: this.closeActions });
+			this.$emit('revealRight', { close: this.closeActions });
+		},
+
+		_updateRevelead(val) {
+			// console.log(val);
+			if (this.revealed !== undefined) {
+				this.$emit('update:revealed', val);
+				return;
+			}
+			this.innerRevealed = val;
 		},
 
 		// shift actions

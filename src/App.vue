@@ -4,8 +4,9 @@
 			ref="list"
 			class="card"
 			:disabled="!enabled"
-			:items="mockSwipeList"
+			:items="mockSwipeList[page]"
 			item-key="id"
+			:revealed.sync="revealed"
 			@swipeout:click="itemClick"
 		>
 			<template v-slot="{ item, index, revealLeft, revealRight, close }">
@@ -17,7 +18,7 @@
 				<div ref="content" class="card-content">
 					<!-- style content how ever you like -->
 					<h2>{{ item.title }}</h2>
-					<p>{{ item.description }}</p>
+					<p>{{ item.description }} {{ item.id }}</p>
 					<span>{{ index }}</span>
 				</div>
 			</template>
@@ -65,6 +66,15 @@
 			<button @click="closeAll">
 				close all
 			</button>
+			<button @click="page = Math.max(page - 1, 0)">
+				prev
+			</button>
+			<button @click="page = Math.min(page + 1, 1)">
+				next
+			</button>
+			<button @click="testOne">
+				test1
+			</button>
 		</p>
 		<p>
 			<small>
@@ -86,23 +96,44 @@ export default {
   },
   data() {
     return {
-      enabled: true,
+	  enabled: true,
+	  page: 0,
+	  revealed: {},
       mockSwipeList: [
-        {
-          id: 0,
-          title: "Some title",
-          description: "some description"
-        },
-        {
-          id: 1,
-          title: "Some title",
-          description: "some description"
-        },
-        {
-          id: 2,
-          title: "Some title",
-          description: "some description"
-        }
+		[
+			{
+			id: 'a',
+			title: "Some title",
+			description: "some description"
+			},
+			{
+			id: 'b',
+			title: "Some title",
+			description: "some description"
+			},
+			{
+			id: 'c',
+			title: "Some title",
+			description: "some description"
+			},
+		],
+		[
+			{
+			id: 'd',
+			title: "Some title",
+			description: "some description"
+			},
+			{
+			id: 'e',
+			title: "Some title",
+			description: "some description"
+			},
+			{
+			id: 'f',
+			title: "Some title",
+			description: "some description"
+			}
+		],
       ]
     };
   },
@@ -137,7 +168,13 @@ export default {
 		setTimeout(() => {
       		this.mockSwipeList = this.mockSwipeList.filter(i => i !== item);
 		}, 200)
-    },
+	},
+
+	testOne() {
+		this.mockSwipeList[0][0].title = 'Changed';
+		this.$set(this.revealed, 'a', 'right');
+		// this.revealed.a = 'right';
+	},
 
     itemClick(e) {
       console.log(e, "item click");
