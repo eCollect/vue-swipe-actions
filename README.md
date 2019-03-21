@@ -186,71 +186,7 @@ export default {
 }
 ```
 
-### Styling
-
-The default styling is as minimal as possible, defining no visual styles but only functional ones.
-You can overwrite any of the styles if needed.
-
-```css
-/* SwipeOut */
-.swipeout {
-	position: relative;
-	overflow: hidden;
-	display: flex;
-}
-
-.swipeout .swipeout-left, .swipeout .swipeout-right {
-	position: absolute;
-	height: 100%;
-	display: flex;
-	z-index: 1;
-}
-
-.swipeout .swipeout-left {
-	left: 0;
-	transform: translateX(-100%);
-}
-
-.swipeout .swipeout-right {
-	right: 0;
-	transform: translateX(100%);
-}
-
-.swipeout .swipeout-content,
-.swipeout .swipeout-action {
-	transition: transform .2s;
-	will-change: transform;
-}
-
-.swipeout.swipeout--no-transition .swipeout-content,
-.swipeout.swipeout--no-transition .swipeout-action {
-  transition: none !important;
-}
-
-.swipeout .swipeout-content {
-	width: 100%;
-}
-
-.swipeout-non-selectable {
-	user-select: none !important;
-}
-
-.swipeout-no-pointer-events {
-	pointer-events: none !important;
-}
-
-/* SwipeList */
-
-.swipeout-list {
-	display: flex;
-	flex-direction: column;
-}
-
-.swipeout-list-item {
-	flex: 1;
-}
-```
 
 ## Author
 
-&#169; 2018 eCollect AG.
+&#169; 2018-9 eCollect AG.
