@@ -1,7 +1,7 @@
 {
   "name": "vue-swipe-actions",
   "description": "iOS style swipe actions",
-  "version": "2.0.0-beta.6",
+  "version": "2.0.0-beta.7",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
