@@ -32,9 +32,9 @@
   },
   "main": "./dist/vue-swipe-actions.common.js",
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.5.0",
-    "@vue/cli-plugin-eslint": "^3.5.0",
-    "@vue/cli-service": "^3.5.0",
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
     "eslint": "^5.15.1",
     "eslint-config-ecollect-vue": "^0.1.0-beta.1",
     "eslint-loader": "^2.1.2",
