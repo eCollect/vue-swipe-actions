@@ -12,7 +12,10 @@
 		"publish": "npm run build-bundle && npm publish"
   },
   "gh-pages-deploy": {
-    "staticpath": "demo/dist"
+    "staticpath": "demo/dist",
+    "prep": [
+      "build-demo"
+    ]
   },
   "author": {
     "name": "eCollect AG"
