@@ -57,7 +57,7 @@
 	import SwipeOut from './SwipeOut';
 
 	export default {
-		name: 'vue-swipe-list',
+		name: 'VueSwipeList',
 		props: {
 			items: {
 				type: Array,

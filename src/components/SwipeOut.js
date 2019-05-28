@@ -1,7 +1,7 @@
 import touchPan from '../directives/touch-horizontal-pan';
 
 // eslint-disable-next-line no-unused-vars
-import styles from '../styles/vue-swipe-actions.css';
+// import styles from '../styles/vue-swipe-actions.css';
 
 function translateX(x) {
 	if (x === 0)
