@@ -4980,6 +4980,13 @@ is-plain-object@^2.0.1, is-plain-object@^2.0.3, is-plain-object@^2.0.4:
   dependencies:
     isobject "^3.0.1"
 
+is-plain-object@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-3.0.0.tgz#47bfc5da1b5d50d64110806c199359482e75a928"
+  integrity sha512-tZIpofR+P05k8Aocp7UI/2UTa9lTJSebCXpFFoR9aibpokDj/uXBsJ8luUu0tTVYKkMU6URDUuOfJZ7koewXvg==
+  dependencies:
+    isobject "^4.0.0"
+
 is-promise@^2.0.0, is-promise@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.1.0.tgz#79a2a9ece7f096e80f36d2b2f3bc16c1ff4bf3fa"
@@ -5056,6 +5063,11 @@ isobject@^2.0.0:
 isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
+
+isobject@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/isobject/-/isobject-4.0.0.tgz#3f1c9155e73b192022a80819bacd0343711697b0"
+  integrity sha512-S/2fF5wH8SJA/kmwr6HYhK/RI/OkhD84k8ntalo0iJjZikgq1XFvR5M8NPT1x5F7fBwCG3qHfnzeP/Vh/ZxCUA==
 
 isstream@0.1.x, isstream@~0.1.2:
   version "0.1.2"
@@ -7661,6 +7673,23 @@ rollup-plugin-commonjs@^10.0.0:
     magic-string "^0.25.2"
     resolve "^1.10.1"
     rollup-pluginutils "^2.7.0"
+
+rollup-plugin-copy@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-copy/-/rollup-plugin-copy-2.0.1.tgz#2a45e45be84a0d4054d1774604044e7f7581fdae"
+  integrity sha512-IE+Ob5k1Pi/DLi8SlFcf9jN1m2p0ovIwMuz0GM5NeQeV14puW/bCUpmXlqVtQVy+ErXOhZEeBaqinJ0xnJdxKg==
+  dependencies:
+    chalk "^2.4.2"
+    fs-extra "^7.0.1"
+    is-plain-object "^3.0.0"
+
+rollup-plugin-css-only@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-css-only/-/rollup-plugin-css-only-1.0.0.tgz#dc027d657d02e7706b855d856dcb0fdd49935135"
+  integrity sha512-WY8bISLKzWCnUmHMOhsgbQ/bZz1J1eigwMROixTWZb4yPrMCA4vbfQog6n3bsOQMfq39Kih6jWY9Xn9rYjiqXw==
+  dependencies:
+    mkdirp "^0.5.1"
+    rollup-pluginutils "^2.3.3"
 
 rollup-plugin-json@^4.0.0:
   version "4.0.0"

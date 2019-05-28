@@ -96,7 +96,7 @@
 </template>
 
 <script>
-	import { SwipeList, SwipeOut } from './components/index';
+	import { SwipeList, SwipeOut } from '../../src/components';
 
 	export default {
 		name: 'App',

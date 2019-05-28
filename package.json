@@ -4,10 +4,9 @@
   "version": "2.0.0-beta.7",
   "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "NODE_ENV=production vue-cli-service build",
-    "build-new": "node build/build.js",
-    "build-bundle": "vue-cli-service --mode production build --target lib --name vue-swipe-actions ./src/components/index.js",
+    "serve": "vue-cli-service serve ./demo/src/main.js",
+    "build-demo": "NODE_ENV=production vue-cli-service build ./demo/src/main.js --dest ./demo/dist",
+    "build-bundle": "node build/build.js",
     "lint": "vue-cli-service lint",
     "deploy": "gh-pages-deploy"
   },
@@ -31,8 +30,8 @@
     "type": "git",
     "url": "https://github.com/eCollect/vue-swipe-actions"
   },
-	"main": "./dist/vue-swipe-actions.common.js",
-	"module": "./src/index.esm.js",
+  "main": "./dist/vue-swipe-actions.common.js",
+  "module": "./src/index.esm.js",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
@@ -52,7 +51,6 @@
     "rollup-plugin-commonjs": "^10.0.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.0.0",
-    "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-vue": "^5.0.0",
     "uglify-es": "^3.3.9",
     "vue-template-compiler": "^2.6.x"
@@ -72,8 +70,8 @@
     "not ie <= 11"
   ],
   "files": [
-		"dist",
-		"src"
+    "dist",
+    "src"
   ],
   "dependencies": {
     "babel-eslint": "^10.0.1",

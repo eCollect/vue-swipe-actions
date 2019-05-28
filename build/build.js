@@ -32,3 +32,6 @@ if (!type || type === 'js')
 
 if (!type || type === 'css')
 	runJob(join(__dirname, './build.styles.js'));
+
+if (type === 'demo')
+	runJob(join(__dirname, './build.demo.js'));
