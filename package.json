@@ -8,14 +8,11 @@
     "build-demo": "NODE_ENV=production vue-cli-service build ./demo/src/main.js --dest ./demo/dist",
     "build-bundle": "node build/build.js",
     "lint": "vue-cli-service lint",
-		"deploy": "npm run build-demo && gh-pages-deploy",
+		"deploy": "gh-pages-deploy",
 		"publish": "npm run build-bundle && npm publish"
   },
   "gh-pages-deploy": {
-    "staticpath": "/demo/dist",
-    "prep": [
-      "build"
-    ]
+    "staticpath": "demo/dist"
   },
   "author": {
     "name": "eCollect AG"
