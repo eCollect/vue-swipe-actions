@@ -1,17 +1,18 @@
 {
   "name": "vue-swipe-actions",
   "description": "iOS style swipe actions",
-  "version": "2.0.0-beta.7",
+  "version": "2.0.0-beta.8",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve ./demo/src/main.js",
     "build-demo": "NODE_ENV=production vue-cli-service build ./demo/src/main.js --dest ./demo/dist",
     "build-bundle": "node build/build.js",
     "lint": "vue-cli-service lint",
-    "deploy": "gh-pages-deploy"
+		"deploy": "npm run build-demo && gh-pages-deploy",
+		"publish": "npm run build-bundle && npm publish"
   },
   "gh-pages-deploy": {
-    "staticpath": "dist",
+    "staticpath": "/demo/dist",
     "prep": [
       "build"
     ]
