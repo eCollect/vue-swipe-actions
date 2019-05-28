@@ -8,8 +8,7 @@
     "build-demo": "NODE_ENV=production vue-cli-service build ./demo/src/main.js --dest ./demo/dist",
     "build-bundle": "node build/build.js",
     "lint": "vue-cli-service lint",
-		"deploy": "gh-pages-deploy",
-		"publish": "npm run build-bundle && npm publish"
+		"deploy": "gh-pages-deploy"
   },
   "gh-pages-deploy": {
     "staticpath": "demo/dist",
@@ -73,9 +72,5 @@
   "files": [
     "dist",
     "src"
-  ],
-  "dependencies": {
-    "babel-eslint": "^10.0.1",
-    "vue": "^2.6.8"
-  }
+  ]
 }
