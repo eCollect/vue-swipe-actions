@@ -253,6 +253,7 @@ export default {
 				revealLeft: this.revealLeft,
 				revealRight: this.revealRight,
 				close: this.closeActions,
+				revealed: this.innerRevealed,
 			}) : null),
 		);
 
