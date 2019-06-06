@@ -1,8 +1,8 @@
 const nodeResolve = require('rollup-plugin-node-resolve');
 const buble = require('rollup-plugin-buble');
 const json = require('rollup-plugin-json');
-const vue = require('rollup-plugin-vue');
-const commonjs = require('rollup-plugin-commonjs');
+// const vue = require('rollup-plugin-vue');
+// const commonjs = require('rollup-plugin-commonjs');
 const rollup = require('rollup');
 const uglify = require('uglify-es');
 
@@ -86,8 +86,8 @@ function genConfig(opts) {
 			preferBuiltins: false,
 		}),
 		json(),
-		commonjs(),
-		vue({ compileTemplate: true }),
+		// commonjs(),
+		// vue({ compileTemplate: true }),
 		buble(bubleConfig),
 		...(opts.afterPLugins || []),
 		/*
