@@ -11,10 +11,7 @@
 		"deploy": "gh-pages-deploy"
 	},
 	"gh-pages-deploy": {
-		"staticpath": "demo/dist",
-		"prep": [
-			"build-demo"
-		]
+		"staticpath": "demo/dist"
 	},
 	"author": {
 		"name": "eCollect AG"
