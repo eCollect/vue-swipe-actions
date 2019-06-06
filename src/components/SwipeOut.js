@@ -25,7 +25,7 @@ export default {
 			default: 45,
 		},
 		revealed: {
-			type: String,
+			type: [String, Boolean],
 		},
 		/**
 		* Is the item disabled
