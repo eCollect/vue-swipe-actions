@@ -11,7 +11,7 @@
 			@leftRevealed="setLastEvent('leftRevealed', $event)"
 			@rightRevealed="setLastEvent('rightRevealed', $event)"
 		>
-			<template v-slot="{ item, index, revealLeft, revealRight, close }">
+			<template v-slot="{ item, index, revealLeft, revealRight, close, revealed }">
 				<!-- item is the corresponding object from the array -->
 				<!-- index is clearly the index -->
 				<!-- revealLeft is method which toggles the left side -->
@@ -97,6 +97,8 @@
 
 <script>
 	import { SwipeList, SwipeOut } from '../../src/components';
+	// eslint-disable-next-line no-unused-vars
+	import css from '../../src/styles/vue-swipe-actions.css';
 
 	export default {
 		name: 'App',
