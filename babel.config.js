@@ -2,7 +2,14 @@
 module.exports = {
 	env: {
 		production: {
-			presets: ['es2015-rollup'],
+			presets: [
+				[
+					'@babel/preset-env',
+					{
+						useBuiltIns: 'entry',
+					},
+				],
+			],
 			comments: false,
 		},
 	},
