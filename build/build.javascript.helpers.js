@@ -77,17 +77,17 @@ function buildEntry(config) {
 }
 
 function genConfig(opts) {
-	const vueOpts = opts.vue || {};
+	// const vueOpts = opts.vue || { compileTemplate: true };
 	const prePlugins = opts.prePlugins || [];
 	const plugins = [
 		...prePlugins,
-		json(),
-		vue(vueOpts),
 		nodeResolve({
 			extensions: ['.js'],
 			preferBuiltins: false,
 		}),
+		json(),
 		commonjs(),
+		vue({ compileTemplate: true }),
 		buble(bubleConfig),
 		...(opts.afterPLugins || []),
 		/*
