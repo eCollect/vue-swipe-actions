@@ -1,5 +1,5 @@
 import SwipeOut from './SwipeOut';
-import SwipeList from './SwipeList.vue';
+import SwipeList from './SwipeList';
 
 export {
 	SwipeOut,
