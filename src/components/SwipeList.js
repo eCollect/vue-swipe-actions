@@ -132,24 +132,19 @@ export default {
 				revealLeft,
 				revealRight,
 				revealed,
-			}) => h('div', {
-				ref: 'itemsContent',
-				on: {
-					click: () => this.$emit('swipeout:click', item),
-				},
-			},
-			defaultScope({
+			}) => defaultScope({
 				item,
 				index,
 				close,
 				revealed,
 				revealLeft,
 				revealRight,
-			}));
+			});
 
 			return h(SwipeOut, {
 				key: index,
 				ref: 'items',
+				refInFor: true,
 				staticClass: 'swipeout-list-item',
 				props: {
 					disabled: this.disabled,
