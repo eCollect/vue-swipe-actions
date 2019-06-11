@@ -20,7 +20,7 @@
 				<div ref="content" class="card-content" @click.native="itemClick(item)">
 					<!-- style content how ever you like -->
 					<h2>{{ item.title }}</h2>
-					<p><b>id:</b> {{ item.id }} <b>description:</b> {{ item.description }}</p>
+					<p><b>id:</b> {{ item.id }} <b>description:</b> {{ item.description }} <b>revealed:</b> {{ revealed || 'flase' }}</p>
 					<b>index:</b><span> {{ index }}</span>
 				</div>
 			</template>
