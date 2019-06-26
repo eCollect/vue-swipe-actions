@@ -130,6 +130,9 @@ export default {
 			if (this._isActive)
 				return;
 
+			if (dir && !this.$refs[dir])
+				return;
+
 			this.innerRevealed = dir;
 			this.$emit('update:revealed', dir);
 
@@ -139,6 +142,7 @@ export default {
 				this.$emit('closed');
 				return;
 			}
+
 
 			// left
 			if (dir === 'left') {
@@ -150,10 +154,12 @@ export default {
 			}
 
 			// right
-			this._rightActionsWidth = recalculateWidth ? clientWidth(this.$refs.right) : this._rightActionsWidth;
-			this._animateSlide(-this._rightActionsWidth);
-			this.$emit('revealed', { side: 'right', close: this.closeActions });
-			this.$emit('rightRevealed', { close: this.closeActions });
+			if (dir === 'right') {
+				this._rightActionsWidth = recalculateWidth ? clientWidth(this.$refs.right) : this._rightActionsWidth;
+				this._animateSlide(-this._rightActionsWidth);
+				this.$emit('revealed', { side: 'right', close: this.closeActions });
+				this.$emit('rightRevealed', { close: this.closeActions });
+			}
 		},
 		// shift actions
 		_shiftLeftActions(newX) {
