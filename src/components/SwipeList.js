@@ -147,7 +147,7 @@ export default {
 				refInFor: true,
 				staticClass: 'swipeout-list-item',
 				props: {
-					disabled: this.disabled,
+					disabled: this.disabled || item.swipeDisabled,
 					threshold: this.threshold,
 					revealed: this.innerRevealed[index],
 				},
