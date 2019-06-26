@@ -55,6 +55,7 @@
 		"rollup-plugin-node-resolve": "^5.1.0",
 		"rollup-plugin-vue": "^5.0.0",
 		"uglify-es": "^3.3.9",
+		"vue": "^2.6.10",
 		"vue-template-compiler": "^2.6.10"
 	},
 	"peerDependencies": {
