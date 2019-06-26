@@ -7,6 +7,7 @@
 			:items="mockSwipeList[page]"
 			item-key="id"
 			:revealed.sync="revealed"
+			:item-disabled="({ disabled }) => disabled"
 			@closed="setLastEvent('closed', $event)"
 			@leftRevealed="setLastEvent('leftRevealed', $event)"
 			@rightRevealed="setLastEvent('rightRevealed', $event)"
@@ -22,6 +23,12 @@
 					<h2>{{ item.title }}</h2>
 					<p><b>id:</b> {{ item.id }} <b>description:</b> {{ item.description }} <b>revealed:</b> {{ revealed || 'flase' }}</p>
 					<b>index:</b><span> {{ index }}</span>
+					<input
+						:id="`${index}disabled`"
+						v-model="item.disabled"
+						type="checkbox"
+					>
+					<label :for="`${index}disabled`">Disabled</label>
 				</div>
 			</template>
 			<!-- left swipe side template and v-slot:left="{ item }" is the item clearly -->
@@ -118,16 +125,19 @@
 							id: 'a',
 							title: 'Some title',
 							description: 'some description',
+							disabled: false,
 						},
 						{
 							id: 'b',
 							title: 'Some title',
 							description: 'some description',
+							disabled: false,
 						},
 						{
 							id: 'c',
 							title: 'Some title',
 							description: 'some description',
+							disabled: false,
 						},
 					],
 					[
@@ -135,16 +145,19 @@
 							id: 'd',
 							title: 'Some title',
 							description: 'some description',
+							disabled: false,
 						},
 						{
 							id: 'e',
 							title: 'Some title',
 							description: 'some description',
+							disabled: false,
 						},
 						{
 							id: 'f',
 							title: 'Some title',
 							description: 'some description',
+							disabled: false,
 						},
 					],
 				],
@@ -160,6 +173,9 @@
 			window.removeEventListener('keyup', this.onKeyUp);
 		},
 		methods: {
+			dd(v) {
+				console.log(v.target);
+			},
 			revealFirstRight() {
 				this.$refs.list.revealRight(0);
 			},
