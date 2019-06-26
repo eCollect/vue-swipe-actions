@@ -28,6 +28,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		itemDisabled: {
+			type: Function,
+			default: () => false,
+		},
 	},
 	data() {
 		return {
@@ -147,7 +151,7 @@ export default {
 				refInFor: true,
 				staticClass: 'swipeout-list-item',
 				props: {
-					disabled: this.disabled,
+					disabled: this.disabled || this.itemDisabled(item),
 					threshold: this.threshold,
 					revealed: this.innerRevealed[index],
 				},
