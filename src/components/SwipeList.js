@@ -136,14 +136,20 @@ export default {
 				revealLeft,
 				revealRight,
 				revealed,
-			}) => defaultScope({
+			}) => h('div', {
+				ref: 'itemsContent',
+				on: {
+					click: () => this.$emit('swipeout:click', item),
+				},
+			},
+			defaultScope({
 				item,
 				index,
 				close,
 				revealed,
 				revealLeft,
 				revealRight,
-			});
+			}));
 
 			return h(SwipeOut, {
 				key: index,
