@@ -124,7 +124,16 @@ export default {
 
 			if ((this._startLeft === 0 && Math.abs(newX) <= this.threshold) || (distance.x >= this.threshold && ((this._startLeft > 0 && distance.x < this._leftActionsWidth) || (this._startLeft < 0 && distance.x < this._rightActionsWidth)))) // {
 				return this._reveal(false);
-			return this._reveal(newX > 0 ? 'left' : 'right');
+
+			const dir = newX > 0 ? 'left' : 'right';
+
+			if (dir === 'left' && !this.$refs.left)
+				return this._reveal(false);
+
+			if (dir === 'right' && !this.$refs.right)
+				return this._reveal(false);
+
+			return this._reveal(dir);
 		},
 		_reveal(dir, recalculateWidth) {
 			if (this._isActive)
