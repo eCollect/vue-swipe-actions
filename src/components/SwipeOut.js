@@ -14,6 +14,13 @@ function clientWidth(ref) {
 	return ref ? ref.clientWidth : 0;
 }
 
+// eslint-disable-next-line no-unused-vars
+function areEqual(a, b) {
+	if (!a && !b)
+		return true;
+	return a === b;
+}
+
 export default {
 	name: 'SwipeOut',
 	directives: {
@@ -127,11 +134,11 @@ export default {
 			return this._reveal(newX > 0 ? 'left' : 'right');
 		},
 		_reveal(dir, recalculateWidth) {
-			if (this._isActive)
+			if (this._isActive && areEqual(this.innerRevealed, dir))
 				return;
 
 			if (dir && !this.$refs[dir])
-				return;
+				dir = false;
 
 			this.innerRevealed = dir;
 			this.$emit('update:revealed', dir);
@@ -145,7 +152,7 @@ export default {
 
 
 			// left
-			if (dir === 'left') {
+			if (dir === 'left' && this.$refs.left) {
 				this._leftActionsWidth = recalculateWidth ? clientWidth(this.$refs.left) : this._leftActionsWidth;
 				this._animateSlide(this._leftActionsWidth);
 				this.$emit('revealed', { side: 'left', close: this.closeActions });
@@ -154,7 +161,7 @@ export default {
 			}
 
 			// right
-			if (dir === 'right') {
+			if (dir === 'right' && this.$refs.right) {
 				this._rightActionsWidth = recalculateWidth ? clientWidth(this.$refs.right) : this._rightActionsWidth;
 				this._animateSlide(-this._rightActionsWidth);
 				this.$emit('revealed', { side: 'right', close: this.closeActions });
