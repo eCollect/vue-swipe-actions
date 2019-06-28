@@ -134,6 +134,9 @@ export default {
 			},
 
 			move(evt) {
+				if (!ctx.event)
+					return;
+
 				if (ctx.event.abort === true)
 					return;
 
@@ -180,6 +183,9 @@ export default {
 			},
 
 			end(evt) {
+				if (!ctx.event)
+					return;
+
 				if (ctx.event.mouse !== true) removeObserver(ctx);
 
 				document.documentElement.style.cursor = '';
