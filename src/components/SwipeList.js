@@ -32,6 +32,10 @@ export default {
 			type: Function,
 			default: () => false,
 		},
+		passiveListeners: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -160,6 +164,7 @@ export default {
 					disabled: this.disabled || this.itemDisabled(item),
 					threshold: this.threshold,
 					revealed: this.innerRevealed[index],
+					passiveListeners: this.passiveListeners,
 				},
 				on: {
 					revealed: $event => this._onReveal(item, index, $event),

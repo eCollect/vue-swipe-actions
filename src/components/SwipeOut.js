@@ -41,6 +41,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		passiveListeners: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	watch: {
 		revealed(val) {
@@ -258,7 +262,7 @@ export default {
 					modifiers: {
 						horizontal: true,
 						mouse: true,
-						prevent: true,
+						prevent: !this.passiveListeners,
 						mousePrevent: true,
 					},
 				}] : null,
