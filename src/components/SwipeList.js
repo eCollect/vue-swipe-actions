@@ -137,6 +137,7 @@ export default {
 
 			scopedSlots.default = ({
 				close,
+				disabled,
 				revealLeft,
 				revealRight,
 				revealed,
@@ -150,6 +151,7 @@ export default {
 				item,
 				index,
 				close,
+				disabled,
 				revealed,
 				revealLeft,
 				revealRight,
