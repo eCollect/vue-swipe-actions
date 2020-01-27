@@ -12,7 +12,7 @@
 			@leftRevealed="setLastEvent('leftRevealed', $event)"
 			@rightRevealed="setLastEvent('rightRevealed', $event)"
 		>
-			<template v-slot="{ item, index, revealLeft, revealRight, close, revealed }">
+			<template v-slot="{ item, index, revealLeft, revealRight, close, revealed, disabled }">
 				<!-- item is the corresponding object from the array -->
 				<!-- index is clearly the index -->
 				<!-- revealLeft is method which toggles the left side -->
@@ -21,7 +21,7 @@
 				<div ref="content" class="card-content" @click.native="itemClick(item)">
 					<!-- style content how ever you like -->
 					<h2>{{ item.title }}</h2>
-					<p><b>id:</b> {{ item.id }} <b>description:</b> {{ item.description }} <b>revealed:</b> {{ revealed || 'flase' }}</p>
+					<p><b>id:</b> {{ item.id }} <b>description:</b> {{ item.description }} <b>revealed:</b> {{ revealed || 'false' }} <b>disabled:</b> {{ disabled }}</p>
 					<b>index:</b><span> {{ index }}</span>
 					<input
 						:id="`${index}disabled`"
