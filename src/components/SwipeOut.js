@@ -269,6 +269,7 @@ export default {
 			}, defaultScope ? defaultScope({
 				revealLeft: this.revealLeft,
 				revealRight: this.revealRight,
+				disabled: this.disabled,
 				close: this.closeActions,
 				revealed: this.innerRevealed,
 			}) : null),
