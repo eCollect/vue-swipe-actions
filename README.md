@@ -40,6 +40,7 @@ SwipeList component is just a helper for listing multiple SwipeOuts.
 | `disabled`       | Boolean   |         |false  | if true items will be disabled, and text selection will be possible (on desktop). adds class ``swipeout--disabled``  |
 | `item-disabled`  | Function    |         |`js () => false`     | A function that receives the item as parameter and returns true case disabled or false if not   |
 | `threshold`      | Number    |         |45     | With that property you can fine tune when actions are considered open |
+| `passive-listeners`      | Boolean    |         |false     | It defines if the touch events should be registered as passive or not |
 | `revealed`       | Object | || An object representing the revealed status of the items, key is the index and the value is either ```left``` or ```right```, use it with the ```.sync``` modifier |
 
 #### Events
